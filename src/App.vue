@@ -9,20 +9,6 @@
       fixed
       app
     >
-      <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
       <todo-list :todos="todos"></todo-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -80,18 +66,21 @@ export default {
   },
   data () {
     return {
+      title: 'Todo!',
       clipped: false,
-      drawer: true,
       fixed: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
       miniVariant: false,
       right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-      todos: []
+      drawer: this.$store.getters.drawer,
+      rightDrawer: false
+    }
+  },
+  computed: {
+    todos () {
+      return this.$store.getters.todos
+    },
+    edited_todo () {
+      return this.$store.getters.edited_todo
     }
   }
 }

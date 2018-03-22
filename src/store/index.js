@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export default {
   state: {
+    drawer: false,
     api: {
       scheme: 'https',
       host: 'localhost:3000',
@@ -9,29 +10,22 @@ export default {
     },
     user: {},
     todos: [],
-    edited_todo: {}
+    edited_todo: {
+      content: ''
+    }
   },
   getters: {
     todos: state => state.todos,
-    // Load and edit todo
-    todo: (state) => (id) => {
-      state.edited_todo = state.todos.find(todo => todo._id === id)
-      return this.edited_todo()
-    },
     // Currently edited todo
-    edited_todo (state) {
-      return state.edited_todo
-    },
-    user (state) {
-      return state.user
-    }
+    edited_todo: state => state.edited_todo,
+    user: state => state.user,
+    drawer: state => state.drawer
   },
   actions: {
     addTodo (context, payload) {
       context.commit('addTodo', payload)
     },
     deleteTodo (context, payload) {
-      console.log('dispatch')
       context.commit('deleteTodo', payload)
     },
     updateTodo (context, payload) {
@@ -42,21 +36,31 @@ export default {
     },
     getTodos (context, payload) {
       context.commit('getTodos', payload)
+    },
+    setEditedTodo (context, payload) {
+      context.commit('setEditedTodo', payload)
+    },
+    closeDrawer (context, payload) {
+      console.log('close')
+      context.commit('closeDrawer')
+    },
+    openDrawer (context, payload) {
+      context.commit('openDrawer')
     }
   },
   mutations: {
-    addTodo: (state) => (oTodo) => {
+    addTodo: (state, oTodo) => {
       state.todos = [...state.todos, oTodo]
     },
-    updateTodo: (state) => (oTodo) => {
+    updateTodo: (state, oTodo) => {
       this.deleteTodo(state, oTodo._id)
       state.todos = [...state.todos, oTodo]
     },
-    deleteTodo: (state) => (oTodo) => {
+    deleteTodo: (state, oTodo) => {
       console.log('commit', state, oTodo)
       state.todos = state.todos.filter(t => t._id !== oTodo._id)
     },
-    setTodos: (state) => (oTodos) => {
+    setTodos: (state, oTodos) => {
       state.todos = oTodos
     },
     getTodos: (state) => {
@@ -80,6 +84,16 @@ export default {
         }
         console.log(error.config)
       })
+    },
+    setEditedTodo: (state, oTodo) => {
+      state.edited_todo = oTodo
+    },
+    closeDrawer: (state) => {
+      console.log('close mutation')
+      state.drawer = false
+    },
+    openDrawer: (state) => {
+      state.drawer = true
     }
   }
 }

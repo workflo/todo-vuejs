@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
       <v-flex xs12>
-          <vue-editor v-model="content"></vue-editor>
+          <vue-editor v-model="edited_todo.content"></vue-editor>
       </v-flex>
   </v-layout>
 </template>
@@ -14,10 +14,17 @@ export default {
   components: {
     VueEditor
   },
+  props: [
+    'content'
+  ],
   data () {
     return {
-      content: '',
       editorOption: {}
+    }
+  },
+  computed: {
+    edited_todo () {
+      return this.$store.getters.edited_todo
     }
   }
 }

@@ -66,11 +66,6 @@ new Vue({
   },
   store,
   template: '<App/>',
-  computed: {
-    todos () {
-      return this.$store.getters.todos
-    }
-  },
   mounted: function () {
     this.$store.dispatch('getTodos')
   }

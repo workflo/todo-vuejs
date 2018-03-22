@@ -13,36 +13,16 @@
 </template>
 
 <script>
-import Todo from './TodoItem.vue'
+import TodoItem from './TodoItem.vue'
 
 export default {
-  name: 'TodoList',
+  name: 'todo-list',
   components: {
-    'todo': Todo
+    TodoItem
   },
   props: [
     'todos'
-  ],
-  data () {
-    return {
-      selected: [2]
-    }
-  },
-  methods: {
-    toggle (index) {
-      const i = this.selected.indexOf(index)
-
-      if (i > -1) {
-        this.selected.splice(i, 1)
-      } else {
-        this.selected.push(index)
-      }
-    },
-    deleteTodo (oTodo) {
-      console.log(oTodo)
-      this.$store.dispatch('deleteTodo', oTodo)
-    }
-  }
+  ]
 }
 </script>
 
