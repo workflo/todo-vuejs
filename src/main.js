@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
 import oStore from './store'
@@ -18,12 +20,20 @@ import {
   VList,
   VBtn,
   VCard,
+  VForm,
+  VTextField,
+  VSelect,
+  VCheckbox,
   VIcon,
   VGrid,
   VToolbar,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
+
+// Setup Axios and it's wrapper
+Vue.use(VueAxios, axios)
+// Setup backend JWT authentication and also third parties
 
 Vue.use(Vuex)
 const store = new Vuex.Store(oStore)
@@ -36,6 +46,10 @@ Vue.use(Vuetify, {
     VList,
     VBtn,
     VCard,
+    VForm,
+    VTextField,
+    VSelect,
+    VCheckbox,
     VIcon,
     VGrid,
     VToolbar,

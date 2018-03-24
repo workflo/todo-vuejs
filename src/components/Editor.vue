@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -14,17 +15,21 @@ export default {
   components: {
     VueEditor
   },
-  props: [
-    'content'
-  ],
   data () {
     return {
       editorOption: {}
     }
   },
-  computed: {
-    edited_todo () {
-      return this.$store.getters.edited_todo
+  computed: mapState([
+    'edited_todo'
+  ]),
+  watch: {
+    edited_todo: {
+      handler: function (after, before) {
+        // Return the object that changed
+        console.log(after, before)
+      },
+      deep: true
     }
   }
 }

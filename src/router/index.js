@@ -1,15 +1,30 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/components/Home'
+import VueRouter from 'vue-router'
+// import store from './../store'
+import Login from '@/components/auth/Login'
+import Editor from '@/components/Editor'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+const router = new VueRouter({
+  hashbang: false,
+  history: true,
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Editor
+    },
+    {
+      path: '/auth/login',
+      name: 'Login',
+      component: Login
     }
   ]
 })
+
+router.beforeEach(function ({ to, next }) {
+  console.log({ to, next })
+})
+
+export default router

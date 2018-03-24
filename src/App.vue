@@ -2,55 +2,41 @@
   <v-app>
     <v-navigation-drawer
       persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
       v-model="drawer"
       enable-resize-watcher
-      fixed
       app
     >
-      <todo-list :todos="todos"></todo-list>
+      <v-toolbar flat>
+        <v-list>
+          <v-list-tile>
+            <v-list-tile-title class="title">
+              Todo!
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <todo-list v-if="isAuthenticated" :todos="todos"></todo-list>
     </v-navigation-drawer>
     <v-toolbar
       app
-      :clipped-left="clipped"
+      :clipped-left="true"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
+      <v-btn v-if="isAuthenticated" icon @click="newTodo({content: ''})">
+        <v-icon>note_add</v-icon>
       </v-btn>
       <v-toolbar-title v-text="title"></v-toolbar-title>
+
       <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
     </v-toolbar>
+
     <v-content>
-      <router-view/>
+      <router-view></router-view>
+      <editor v-if="isAuthenticated"></editor>
+      <login v-else></login>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
+
+    <v-footer :fixed="true" app>
       <span>&copy; 2017</span>
     </v-footer>
   </v-app>
@@ -58,21 +44,19 @@
 
 <script>
 import TodoList from './components/TodoList'
+import Editor from './components/Editor'
+import Login from './components/auth/Login'
 
 export default {
   name: 'App',
   components: {
-    TodoList
+    TodoList,
+    Editor,
+    Login
   },
   data () {
     return {
-      title: 'Todo!',
-      clipped: false,
-      fixed: false,
-      miniVariant: false,
-      right: true,
-      drawer: this.$store.getters.drawer,
-      rightDrawer: false
+      title: 'Todo!'
     }
   },
   computed: {
@@ -81,6 +65,22 @@ export default {
     },
     edited_todo () {
       return this.$store.getters.edited_todo
+    },
+    isAuthenticated () {
+      return this.$store.getters.is_authenticated
+    },
+    drawer: {
+      get () {
+        return this.$store.state.drawer
+      },
+      set (val) {
+        this.$store.commit('toggleDrawer', val)
+      }
+    }
+  },
+  methods: {
+    newTodo (oTodo) {
+      this.$store.commit('setEditedTodo', oTodo)
     }
   }
 }
