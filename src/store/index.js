@@ -80,7 +80,7 @@ const actions = {
     context.commit('getTodo', payload)
   },
   getTodos (context, payload) {
-    axios.get(context.getters.api_url + '/todos', {headers: {Authorization: 'Bearer ' + context.getters.auth_token}}).then((oResponse) => {
+    axios.get(context.getters.api_url + '/todos?sort=' + JSON.stringify({updated: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.getters.auth_token}}).then((oResponse) => {
       context.commit('getTodos', oResponse.data.data)
     }).catch(handleXHRerrors)
   },

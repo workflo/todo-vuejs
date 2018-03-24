@@ -29,12 +29,10 @@ export default {
   ]),
   methods: {
     save () {
-      console.log(this.edited_todo.content)
       let payload = {content: this.edited_todo.content}
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }
-      console.log('payload', payload)
       this.$store.dispatch('createOrUpdateTodo', payload)
     }
   }
