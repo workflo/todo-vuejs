@@ -2,6 +2,9 @@
   <v-layout row wrap>
       <v-flex xs12>
           <vue-editor v-model="edited_todo.content"></vue-editor>
+          <v-layout justify-end>
+              <v-btn @click="save()">Save</v-btn>
+          </v-layout>
       </v-flex>
   </v-layout>
 </template>
@@ -17,19 +20,22 @@ export default {
   },
   data () {
     return {
+      content: '',
       editorOption: {}
     }
   },
   computed: mapState([
     'edited_todo'
   ]),
-  watch: {
-    edited_todo: {
-      handler: function (after, before) {
-        // Return the object that changed
-        console.log(after, before)
-      },
-      deep: true
+  methods: {
+    save () {
+      console.log(this.edited_todo.content)
+      let payload = {content: this.edited_todo.content}
+      if (typeof this.edited_todo._id !== 'undefined') {
+        payload._id = this.edited_todo._id
+      }
+      console.log('payload', payload)
+      this.$store.dispatch('createOrUpdateTodo', payload)
     }
   }
 }

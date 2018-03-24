@@ -51,18 +51,23 @@ const actions = {
     context.commit('addTodo', payload)
   },
   deleteTodo (context, payload) {
-    axios.delete(context.getters.api_url + '/todos', {data: {id: payload._id}, headers: {Authorization: 'Bearer ' + context.auth_token}}).then((oResponse) => {
+    axios.delete(context.getters.api_url + '/todos', {data: {id: payload._id}, headers: {Authorization: 'Bearer ' + context.getters.auth_token}}).then((oResponse) => {
       context.commit('deleteTodo', payload)
     }).catch(handleXHRerrors)
   },
   createOrUpdateTodo (context, payload) {
+    console.log(payload)
+    // Hack to force content-type on x-www-form-urlencoded rather than JSON
+    let params = new URLSearchParams()
+    params.append('content', payload.content)
     if (payload._id) {
-      axios.put(context.getters.api_url + '/todos', {data: {id: payload._id, content: payload.content}, headers: {Authorization: 'Bearer ' + context.auth_token}}).then((oResponse) => {
+      params.append('id', payload._id)
+      axios.put(context.getters.api_url + '/todos', params, {headers: {Authorization: 'Bearer ' + context.getters.auth_token, 'Content-type': 'application/x-www-form-urlencoded'}}).then((oResponse) => {
         context.commit('updateTodo', payload)
         context.commit('setEditedTodo', payload)
       }).catch(handleXHRerrors)
     } else {
-      axios.post(context.getters.api_url + '/todos', {data: {content: payload.content}, headers: {Authorization: 'Bearer ' + context.auth_token}}).then((oResponse) => {
+      axios.post(context.getters.api_url + '/todos', params, {headers: {Authorization: 'Bearer ' + context.getters.auth_token, 'Content-type': 'application/x-www-form-urlencoded'}}).then((oResponse) => {
         context.commit('addTodo', oResponse.data.data)
         context.commit('setEditedTodo', payload)
       }).catch(handleXHRerrors)
@@ -75,7 +80,7 @@ const actions = {
     context.commit('getTodo', payload)
   },
   getTodos (context, payload) {
-    axios.get(context.getters.api_url + '/todos', {headers: {Authorization: 'Bearer ' + context.auth_token}}).then((oResponse) => {
+    axios.get(context.getters.api_url + '/todos', {headers: {Authorization: 'Bearer ' + context.getters.auth_token}}).then((oResponse) => {
       context.commit('getTodos', oResponse.data.data)
     }).catch(handleXHRerrors)
   },

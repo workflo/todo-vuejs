@@ -22,7 +22,18 @@ export default {
   },
   props: [
     'todos'
-  ]
+  ],
+  watch: {
+    todos: {
+      handler: function (after, before) {
+        console.log(after, before)
+        // if (typeof before !== 'undefined') {
+        //   this.$store.dispatch('createOrUpdateTodo', after)
+        // }
+      },
+      deep: true
+    }
+  }
 }
 </script>
 

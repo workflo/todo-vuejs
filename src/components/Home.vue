@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-slide-y-transition mode="out-in">
-            <component is="home"></component>
+            <component  is="home"></component>
         </v-slide-y-transition>
     </v-container>
 </template>

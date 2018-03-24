@@ -1,14 +1,9 @@
 <template>
     <div>
         <v-slide-y-transition mode="out-in">
-            <v-list-tile
-                    avatar
-                    ripple
-                    @click="openTodo(todo)"
-                    :key="todo.content"
-            >
+            <v-list-tile ripple>
                 <v-list-tile-content>
-                    <v-list-tile-title>{{ todo.content }}</v-list-tile-title>
+                    <v-list-tile-title @click="openTodo(todo)" :key="todo.content">{{ todo.content }}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action @click="deleteTodo(todo)">
                     <v-icon>delete</v-icon>
