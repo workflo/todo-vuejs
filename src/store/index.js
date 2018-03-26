@@ -42,9 +42,7 @@ const getters = {
 const actions = {
   login (context, payload) {
     vueAuth.login(payload).then((response) => {
-      context.commit('isAuthenticated', {
-        isAuthenticated: vueAuth.isAuthenticated()
-      })
+      context.commit('isAuthenticated', { isAuthenticated: vueAuth.isAuthenticated() })
     })
   },
   addTodo (context, payload) {

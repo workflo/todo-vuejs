@@ -28,6 +28,29 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
 
       <v-spacer></v-spacer>
+      <v-toolbar-items>
+
+        <v-menu v-if="isAuthenticated" offset-y>
+            <v-avatar slot="activator"
+                    :tile="true"
+                    :size="64"
+            >
+              <v-icon x-large color="secondary">account_circle</v-icon>
+            </v-avatar>
+          <v-list>
+            <v-list-tile @click="">
+              <v-list-tile-title>My account</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="">
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+        <v-btn v-else :flat="true">Login</v-btn>
+
+
+      </v-toolbar-items>
+
     </v-toolbar>
 
     <v-content>

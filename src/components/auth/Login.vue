@@ -1,5 +1,5 @@
 <template>
-    <v-form v-model="valid" ref="loginform" lazy-validation>
+    <v-form v-model="valid" ref="loginform" lazy-validation @submit.prevent="login">
 
         <v-btn @click="authenticate('twitter')">Twitter</v-btn>
 
@@ -22,7 +22,7 @@
         ></v-text-field>
         <v-layout justify-end>
             <v-btn
-                    @click="login(email, password)"
+                    type="submit"
                     :disabled="!valid"
             >
                 submit
@@ -53,7 +53,10 @@ export default {
   methods: {
     login (email, password) {
       console.log(email, password)
-      this.$store.dispatch('login', {login: email, password}, {})
+      var scope = this
+      this.$store.dispatch('login', {login: email, password}, {}).then(() => {
+        scope.$router.push('/')
+      })
     },
     authenticate: function (provider) {
       this.$auth.authenticate(provider).then(function () {
