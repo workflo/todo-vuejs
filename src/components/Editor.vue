@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -24,16 +23,23 @@ export default {
       editorOption: {}
     }
   },
-  computed: mapState([
-    'edited_todo'
-  ]),
+  computed: {
+    'edited_todo': {
+      get () {
+        return this.$store.getters['todo/edited_todo']
+      },
+      set (oTodo) {
+        this.$store.dispatch('todo/setEditedTodo', oTodo)
+      }
+    }
+  },
   methods: {
     save () {
       let payload = {content: this.edited_todo.content}
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }
-      this.$store.dispatch('createOrUpdateTodo', payload)
+      this.$store.dispatch('todo/createOrUpdateTodo', payload)
     }
   }
 }

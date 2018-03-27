@@ -1,12 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import Vuex from 'vuex'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
-import oStore from './store'
+import VueCookie from 'vue-cookie'
+
+import store from './store'
 
 import TodoList from './components/TodoList'
 import TodoItem from './components/TodoItem'
@@ -33,12 +32,8 @@ import {
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
-// Setup Axios and it's wrapper
-Vue.use(VueAxios, axios)
-// Setup backend JWT authentication and also third parties
-
-Vue.use(Vuex)
-const store = new Vuex.Store(oStore)
+// Cookie middleware
+Vue.use(VueCookie)
 
 Vue.use(Vuetify, {
   components: {
@@ -83,8 +78,5 @@ new Vue({
     Editor
   },
   store,
-  template: '<App/>',
-  mounted: function () {
-    this.$store.dispatch('getTodos')
-  }
+  template: '<App/>'
 })

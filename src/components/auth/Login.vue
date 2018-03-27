@@ -1,8 +1,6 @@
 <template>
     <v-form v-model="valid" ref="loginform" lazy-validation @submit.prevent="login">
 
-        <v-btn @click="authenticate('twitter')">Twitter</v-btn>
-
         <v-text-field
                 label="Enter your e-mail address"
                 v-model="email"
@@ -35,8 +33,8 @@
 export default {
   name: 'Login',
   data: () => ({
-    email: '',
-    password: '',
+    email: 'test@test.fr',
+    password: '235689',
     error: false,
     showPassword: true,
     valid: false,
@@ -51,16 +49,9 @@ export default {
     ]
   }),
   methods: {
-    login (email, password) {
-      console.log(email, password)
-      var scope = this
-      this.$store.dispatch('login', {login: email, password}, {}).then(() => {
-        scope.$router.push('/')
-      })
-    },
-    authenticate: function (provider) {
-      this.$auth.authenticate(provider).then(function () {
-        // Execute application logic after successful social authentication
+    login () {
+      this.$store.dispatch('auth/AUTH_REQUEST', {login: this.email, password: this.password}, {}).then(() => {
+        this.$router.push('/')
       })
     }
     //

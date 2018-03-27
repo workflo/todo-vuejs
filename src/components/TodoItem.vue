@@ -22,11 +22,11 @@ export default {
   ],
   methods: {
     openTodo (oTodo) {
-      this.$store.dispatch('setEditedTodo', oTodo)
+      this.$store.dispatch('todo/setEditedTodo', oTodo)
       this.$store.dispatch('toggleDrawer', false)
     },
     deleteTodo (oTodo) {
-      this.$store.dispatch('deleteTodo', oTodo)
+      this.$store.dispatch('todo/deleteTodo', oTodo)
     }
   }
 }

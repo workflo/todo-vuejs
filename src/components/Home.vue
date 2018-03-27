@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     home () {
-      return this.$store.is_authenticated ? Editor : Login
+      return this.$store.isAuthenticated ? Editor : Login
     }
   }
 }

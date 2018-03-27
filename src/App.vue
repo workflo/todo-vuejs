@@ -84,13 +84,13 @@ export default {
   },
   computed: {
     todos () {
-      return this.$store.getters.todos
+      return this.$store.getters['todo/todos']
     },
     edited_todo () {
-      return this.$store.getters.edited_todo
+      return this.$store.getters['todo/edited_todo']
     },
     isAuthenticated () {
-      return this.$store.getters.is_authenticated
+      return this.$store.getters['auth/isAuthenticated']
     },
     drawer: {
       get () {
@@ -103,7 +103,12 @@ export default {
   },
   methods: {
     newTodo (oTodo) {
-      this.$store.commit('setEditedTodo', oTodo)
+      this.$store.commit('todo/setEditedTodo', oTodo)
+    }
+  },
+  mounted: function () {
+    if (this.$store.getters['auth/isAuthenticated']) {
+      this.$store.dispatch('todo/getTodos')
     }
   }
 }
