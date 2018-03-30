@@ -26,6 +26,7 @@ import {
   VSelect,
   VCheckbox,
   VIcon,
+  VSnackbar,
   VGrid,
   VToolbar,
   transitions
@@ -50,6 +51,7 @@ Vue.use(Vuetify, {
     VSelect,
     VCheckbox,
     VIcon,
+    VSnackbar,
     VGrid,
     VToolbar,
     transitions

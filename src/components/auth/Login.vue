@@ -26,6 +26,27 @@
                 submit
             </v-btn>
         </v-layout>
+
+        <v-snackbar
+                :timeout="5000"
+                :bottom="true"
+                :vertical="true"
+                v-model="notification_success"
+        >
+            Logged in successfully
+            <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+        </v-snackbar>
+
+        <v-snackbar
+                :timeout="5000"
+                :bottom="true"
+                :vertical="true"
+                v-model="notification_error"
+        >
+            Please check your credentials
+            <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+        </v-snackbar>
+
     </v-form>
 </template>
 
@@ -35,6 +56,8 @@ export default {
   data: () => ({
     email: 'test@test.fr',
     password: '235689',
+    notification_success: false,
+    notification_error: false,
     error: false,
     showPassword: true,
     valid: false,
@@ -50,9 +73,15 @@ export default {
   }),
   methods: {
     login () {
+      var context = this
       this.$store.dispatch('auth/AUTH_REQUEST', {login: this.email, password: this.password}, {}).then(() => {
-        this.$router.push('/')
+        // this.$router.push('/')
+        context.notification_success = (context.$store.getters['auth/isAuthenticated'] === true)
+        context.notification_error = (context.$store.getters['auth/isAuthenticated'] === false)
       })
+    },
+    logout () {
+      this.$store.dispatch('auth/AUTH_LOGOUT')
     }
     //
     // register: function () {

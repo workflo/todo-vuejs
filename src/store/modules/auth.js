@@ -22,12 +22,14 @@ const actions = {
       params.append('password', data.password)
       console.log(context.rootState)
       axios.post(context.rootState.api.scheme + '://' + context.rootState.api.host + '/auth/token', params).then((oResponse) => {
-        console.log(oResponse)
-        localStorage.setItem('auth', oResponse.data.token)
-        // Set axios default JWT token
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
-        context.commit('AUTH_SUCCESS', oResponse.data)
-        context.dispatch('user/USER_REQUEST', {}, {root: true})
+        // Avoid setting token even to undefined
+        if (oResponse.data.token) {
+          localStorage.setItem('auth', oResponse.data.token)
+          // Set axios default JWT token
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
+          context.commit('AUTH_SUCCESS', oResponse.data)
+          context.dispatch('user/USER_REQUEST', {}, {root: true})
+        }
         resolve(oResponse)
       }).catch(err => {
         context.commit('AUTH_ERROR', err)
@@ -38,7 +40,7 @@ const actions = {
   'AUTH_LOGOUT': function () {
     this.$store.dispatch('AUTH_LOGOUT')
       .then(() => {
-        this.$router.push('/login')
+        this.$router.push('/')
       })
   }
 }

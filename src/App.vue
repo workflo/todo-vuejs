@@ -103,7 +103,10 @@ export default {
   },
   methods: {
     newTodo (oTodo) {
-      this.$store.commit('todo/setEditedTodo', oTodo)
+      this.$store.dispatch('todo/setEditedTodo', oTodo)
+    },
+    logout () {
+      this.$store.dispatch('auth/')
     }
   },
   mounted: function () {
