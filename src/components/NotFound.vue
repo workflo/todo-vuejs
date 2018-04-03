@@ -5,9 +5,6 @@
 </template>
 
 <script>
-import Login from './auth/Login'
-import Editor from './Editor'
-
 export default {
   name: 'NotFound'
 }

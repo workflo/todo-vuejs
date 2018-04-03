@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
       <v-flex xs12>
-          <vue-editor v-model="edited_todo.content"></vue-editor>
+          <vue-editor :value="edited_todo.content"></vue-editor>
           <v-layout justify-end>
               <v-btn @click="save()">Save</v-btn>
           </v-layout>
@@ -10,7 +10,9 @@
 </template>
 
 <script>
+import Vuex from 'vuex'
 import { VueEditor } from 'vue2-editor'
+const oStoreTodo = Vuex.createNamespacedHelpers('todo')
 
 export default {
   name: 'Editor',
@@ -19,23 +21,16 @@ export default {
   },
   data () {
     return {
-      content: '',
       editorOption: {}
     }
   },
   computed: {
-    'edited_todo': {
-      get () {
-        return this.$store.getters['todo/edited_todo']
-      },
-      set (oTodo) {
-        this.$store.dispatch('todo/setEditedTodo', oTodo)
-      }
-    }
+    ...oStoreTodo.mapState(['edited_todo'])
   },
   methods: {
     save () {
-      let payload = {content: this.edited_todo.content}
+      console.log(this.edited_todo)
+      let payload = { content: this.edited_todo.content }
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }

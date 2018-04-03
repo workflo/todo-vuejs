@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-  getProfile: state => state.profile,
+  profile: state => state.profile,
   isProfileLoaded: state => !!state.profile.name
 }
 

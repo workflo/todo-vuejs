@@ -2,14 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
 import VueCookie from 'vue-cookie'
+import router from './router'
 
 import store from './store'
-
-import TodoList from './components/TodoList'
-import TodoItem from './components/TodoItem'
-import Editor from './components/Editor'
 
 import {
   Vuetify,
@@ -36,6 +32,7 @@ import '../node_modules/vuetify/src/stylus/app.styl'
 // Cookie middleware
 Vue.use(VueCookie)
 
+// Vuetify frontend
 Vue.use(Vuetify, {
   components: {
     VApp,
@@ -74,10 +71,7 @@ new Vue({
   el: '#app',
   router,
   components: {
-    App,
-    TodoList,
-    TodoItem,
-    Editor
+    App
   },
   store,
   template: '<App/>'

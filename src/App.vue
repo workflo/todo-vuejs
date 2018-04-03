@@ -15,7 +15,10 @@
           </v-list-tile>
         </v-list>
       </v-toolbar>
-      <todo-list v-if="isAuthenticated" :todos="todos"></todo-list>
+
+
+      <router-view name="drawerLeft"></router-view>
+
     </v-navigation-drawer>
     <v-toolbar
       app
@@ -41,12 +44,12 @@
             <v-list-tile @click="">
               <v-list-tile-title>My account</v-list-tile-title>
             </v-list-tile>
-            <v-list-tile @click="">
+            <v-list-tile @click="logout()">
               <v-list-tile-title>Logout</v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
-        <v-btn v-else :flat="true">Login</v-btn>
+        <v-btn v-else :to="{name: 'connect'}" :flat="true"><v-icon>account_circle</v-icon> Login</v-btn>
 
 
       </v-toolbar-items>
@@ -55,8 +58,6 @@
 
     <v-content>
       <router-view></router-view>
-      <editor v-if="isAuthenticated"></editor>
-      <login v-else></login>
     </v-content>
 
     <v-footer :fixed="true" app>
@@ -66,9 +67,12 @@
 </template>
 
 <script>
+import Vuex from 'vuex'
 import TodoList from './components/TodoList'
 import Editor from './components/Editor'
 import Login from './components/auth/Login'
+
+const oStoreAuth = Vuex.createNamespacedHelpers('auth')
 
 export default {
   name: 'App',
@@ -83,15 +87,9 @@ export default {
     }
   },
   computed: {
-    todos () {
-      return this.$store.getters['todo/todos']
-    },
-    edited_todo () {
-      return this.$store.getters['todo/edited_todo']
-    },
-    isAuthenticated () {
-      return this.$store.getters['auth/isAuthenticated']
-    },
+    ...oStoreAuth.mapGetters({
+      isAuthenticated: 'isAuthenticated'
+    }),
     drawer: {
       get () {
         return this.$store.state.drawer
@@ -106,12 +104,9 @@ export default {
       this.$store.dispatch('todo/setEditedTodo', oTodo)
     },
     logout () {
-      this.$store.dispatch('auth/')
-    }
-  },
-  mounted: function () {
-    if (this.$store.getters['auth/isAuthenticated']) {
-      this.$store.dispatch('todo/getTodos')
+      this.$store.dispatch('auth/AUTH_LOGOUT').then(() => {
+        this.$router.push({name: 'connect'})
+      })
     }
   }
 }

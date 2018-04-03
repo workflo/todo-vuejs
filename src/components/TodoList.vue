@@ -13,26 +13,27 @@
 </template>
 
 <script>
+import Vuex from 'vuex'
 import TodoItem from './TodoItem.vue'
+
+const oStoreTodo = Vuex.createNamespacedHelpers('todo')
 
 export default {
   name: 'todo-list',
   components: {
     TodoItem
   },
-  props: [
-    'todos'
-  ],
-  watch: {
-    todos: {
-      handler: function (after, before) {
-        console.log(after, before)
-        // if (typeof before !== 'undefined') {
-        //   this.$store.dispatch('createOrUpdateTodo', after)
-        // }
-      },
-      deep: true
-    }
+  computed: {
+    ...oStoreTodo.mapGetters({
+      todos: 'todos',
+      edited_todo: 'edited_todo'
+    })
+  },
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      console.log('load des todos')
+      vm.$store.dispatch('todo/getTodos')
+    })
   }
 }
 </script>

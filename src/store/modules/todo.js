@@ -2,9 +2,7 @@ import axios from 'axios'
 
 const state = {
   todos: [],
-  edited_todo: {
-    content: ''
-  }
+  edited_todo: {}
 }
 
 const getters = {
@@ -73,14 +71,12 @@ let handleXHRerrors = function (error) {
 }
 
 const mutations = {
-  createOrUpdateTodo: (state, oTodo) => {
-    // nothing here to do
-  },
+  createOrUpdateTodo: (state, oTodo) => {},
   addTodo: (state, oTodo) => {
     state.todos = [...state.todos, oTodo]
   },
   updateTodo: (state, oTodo) => {
-    this.deleteTodo(state, oTodo._id)
+    mutations.deleteTodo(state, oTodo._id)
     state.todos = [...state.todos, oTodo]
   },
   deleteTodo: (state, oTodo) => {
