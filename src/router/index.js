@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Login from '@/components/auth/Login'
 import NotFound from '@/components/NotFound'
 import Home from '@/components/Home'
-import Editor from '@/components/Editor'
+import Todo from '@/components/Todo'
 import TodoList from '@/components/TodoList'
 
 // Router middleware
@@ -31,7 +31,15 @@ const router = new VueRouter({
       path: '/todo',
       name: 'todo',
       components: {
-        default: Editor,
+        default: Todo,
+        drawerLeft: TodoList
+      }
+    },
+    {
+      path: '/todo/:id?/',
+      name: 'todo-view',
+      components: {
+        default: Todo,
         drawerLeft: TodoList
       }
     }

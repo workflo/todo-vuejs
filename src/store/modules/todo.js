@@ -39,10 +39,8 @@ const actions = {
     }
   },
   setEditedTodo (context, payload) {
+    console.log('setEditedTodo', payload)
     context.commit('setEditedTodo', payload)
-  },
-  getTodo (context, payload) {
-    context.commit('getTodo', payload)
   },
   getTodos (context, payload) {
     axios.get(context.rootGetters.api_url + '/todos?sort=' + JSON.stringify({updated: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
@@ -81,9 +79,6 @@ const mutations = {
   },
   deleteTodo: (state, oTodo) => {
     state.todos = state.todos.filter(t => t._id !== oTodo._id)
-  },
-  setTodos: (state, oTodos) => {
-    state.todos = oTodos
   },
   getTodos: (state, oTodos) => {
     state.todos = oTodos

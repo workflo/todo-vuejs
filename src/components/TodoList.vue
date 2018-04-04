@@ -31,7 +31,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next((vm) => {
-      console.log('load des todos')
       vm.$store.dispatch('todo/getTodos')
     })
   }
