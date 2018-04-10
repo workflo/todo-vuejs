@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
       <v-flex xs12>
-        <editor></editor>
+        <editor :id="edited_todo._id" :value="edited_todo.content" v-on:change="save"></editor>
         <v-layout justify-end>
           <v-btn @click="save()">Save</v-btn>
         </v-layout>
@@ -20,27 +20,24 @@ export default {
   components: {
     Editor
   },
-  state: () => {
-    return {
-      sTodoId: ''
-    }
-  },
   computed: {
-    ...oStoreTodo.mapGetters({
+    ...oStoreTodo.mapState({
+      todos: 'todos',
       edited_todo: 'edited_todo'
     })
   },
-  created () {
-    console.log(this.$router)
-  },
   methods: {
-    save () {
-      let payload = { content: this.content }
-      console.log(payload, this.edited_todo)
+    ...oStoreTodo.mapActions([
+      'getTodo'
+    ]),
+    save (newValue) {
+      let payload = { content: newValue }
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }
-      this.$store.dispatch('todo/createOrUpdateTodo', payload)
+      this.$store.dispatch('todo/createOrUpdateTodo', payload).then(() => {
+        console.log('ok')
+      })
     }
   }
 }

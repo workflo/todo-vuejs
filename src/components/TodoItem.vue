@@ -3,8 +3,11 @@
         <v-slide-y-transition mode="out-in">
             <v-list-tile ripple>
                 <v-list-tile-content>
-                    <router-link :to="{ name: 'todo-view', params: { id: todo._id }}" tag="v-list-tile-title">
-                        {{ todo.content }}
+                    <router-link
+                        :to="{ name: 'todo-view', params: { id: todo._id }}"
+                        tag="v-list-tile-title"
+                    >
+                        <span v-on:click="openTodo(todo)">{{ todo.content }}</span>
                     </router-link>
                 </v-list-tile-content>
                 <v-list-tile-action @click="deleteTodo(todo)">
@@ -23,6 +26,10 @@ export default {
     'index'
   ],
   methods: {
+    openTodo (oTodo) {
+      this.$store.dispatch('todo/setEditedTodo', oTodo)
+      this.$store.dispatch('toggleDrawer', false)
+    },
     deleteTodo (oTodo) {
       this.$store.dispatch('todo/deleteTodo', oTodo)
     }

@@ -26,7 +26,9 @@ const actions = {
           // Set axios default JWT token
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
           context.commit('AUTH_SUCCESS', oResponse.data)
-          context.dispatch('user/USER_REQUEST', {}, {root: true})
+          // context.commit('AUTH_SUCCESS', oResponse.data).then(() => {
+          // context.dispatch('user/USER_REQUEST', {}, {root: true})
+          // })
         }
         resolve(oResponse)
       }).catch(err => {
@@ -49,13 +51,14 @@ const mutations = {
   },
   'AUTH_SUCCESS': (state, token) => {
     state.status = 'success'
-    state.token = token
+    state.token = localStorage.getItem('access_token')
   },
   'AUTH_ERROR': (state) => {
     state.status = 'error'
   },
   'AUTH_LOGOUT': (state) => {
     state.status = 'logout'
+    state.token = ''
     localStorage.removeItem('access_token') // clear your user's token from localstorage
   }
 }

@@ -63,6 +63,17 @@
     <v-footer :fixed="true" app>
       <span>&copy; 2017</span>
     </v-footer>
+
+    <v-snackbar
+            :timeout="5000"
+            :bottom="true"
+            :vertical="true"
+            v-model="notification.show"
+    >
+      {{ notification.msg }}
+      <v-btn flat color="pink" @click.native="notification = { show: false }">Close</v-btn>
+    </v-snackbar>
+
   </v-app>
 </template>
 
@@ -88,7 +99,8 @@ export default {
   },
   computed: {
     ...oStoreAuth.mapGetters({
-      isAuthenticated: 'isAuthenticated'
+      isAuthenticated: 'isAuthenticated',
+      status: 'status'
     }),
     drawer: {
       get () {
@@ -97,6 +109,35 @@ export default {
       set (val) {
         this.$store.commit('toggleDrawer', val)
       }
+    },
+    notification: {
+      get () {
+        return this.$store.state.notification
+      },
+      set (val) {
+        this.$store.commit('toggleNotification', val)
+      }
+    }
+  },
+  beforeRouteUpdate () {
+    let oNotification = {show: true}
+    if (this.status !== '') {
+      oNotification.show = true
+      switch (this.status) {
+        case 'loading' :
+          oNotification.msg = 'Loading in progress...'
+          break
+        case 'success' :
+          oNotification.msg = 'Auth success'
+          break
+        case 'error' :
+          oNotification.msg = 'Login error, please check your credentials'
+          break
+        case 'logout' :
+          oNotification.msg = 'Have a good day, see you soon!'
+          break
+      }
+      this.$store.commit('toggleNotification', oNotification)
     }
   },
   methods: {

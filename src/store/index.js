@@ -13,6 +13,10 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     drawer: false,
+    notification: {
+      show: false,
+      msg: 'empty'
+    },
     api: {
       scheme: 'https',
       host: 'localhost:3000',
@@ -30,11 +34,17 @@ export default new Vuex.Store({
   actions: {
     toggleDrawer (context, payload) {
       context.commit('toggleDrawer', payload)
+    },
+    toggleNotification (context, payload) {
+      context.commit('toggleNotification', payload)
     }
   },
   mutations: {
     toggleDrawer: (state, bOpen) => {
       state.drawer = bOpen
+    },
+    toggleNotification: (state, oNotification) => {
+      state.notification = oNotification
     }
   },
   modules: {

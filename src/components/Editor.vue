@@ -10,6 +10,26 @@ export default {
   components: {
     VueEditor
   },
+  props: {
+    value: {
+      default: '',
+      type: String
+    },
+    id: {
+      default: '',
+      type: String
+    }
+  },
+  watch: {
+    value: function (newVal, oldVal) {
+      if (newVal) {
+        this.content = newVal
+      }
+    },
+    content: function (newVal, oldVal) {
+      this.$emit('change', newVal)
+    }
+  },
   data () {
     return {
       content: '',

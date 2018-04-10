@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import axios from 'axios'
+// import axios from 'axios'
 
 const state = {
   status: '',
@@ -7,21 +7,20 @@ const state = {
 }
 
 const getters = {
-  profile: state => state.profile,
-  isProfileLoaded: state => !!state.profile.name
+  profile: state => state.profile
 }
 
 const actions = {
-  'USER_REQUEST': ({commit, dispatch}) => {
-    commit('USER_REQUEST')
+  'USER_REQUEST': (context, payload) => {
+    context.commit('USER_REQUEST')
 
-    axios.get('https://localhost:3000/api/users', {headers: {Authorization: 'Bearer ' + localStorage.getItem('auth')}}).then((oResponse) => {
-      commit('USER_SUCCESS', oResponse.data.data)
-    }).catch((err) => {
-      console.log(err)
-      // if resp is unauthorized, logout, to
-      dispatch('auth/AUTH_LOGOUT', {root: true})
-    })
+    // axios.get(context.rootState.api.scheme + '://' + context.rootState.api.host + '/api/users', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+    //   context.commit('USER_SUCCESS', oResponse.data.data)
+    // }).catch((err) => {
+    //   console.log(err)
+    //   // if resp is unauthorized, logout, to
+    //   context.dispatch('auth/AUTH_LOGOUT', {}, {root: true})
+    // })
   }
 }
 

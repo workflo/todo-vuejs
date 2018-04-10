@@ -8,8 +8,7 @@ const state = {
 const getters = {
   todos: state => state.todos,
   // Currently edited todo
-  edited_todo: state => state.edited_todo,
-  drawer: state => state.drawer
+  edited_todo: state => state.edited_todo
 }
 
 const actions = {
@@ -45,6 +44,15 @@ const actions = {
   getTodos (context, payload) {
     axios.get(context.rootGetters.api_url + '/todos?sort=' + JSON.stringify({updated: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
       context.commit('getTodos', oResponse.data.data)
+    }).catch(handleXHRerrors)
+  },
+  getTodoById: (context, payload) => {
+    console.log(payload.id)
+    axios.get(context.rootGetters.api_url, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+      return new Promise((resolve, reject) => {
+        console.log(oResponse)
+        resolve()
+      })
     }).catch(handleXHRerrors)
   }
 }
