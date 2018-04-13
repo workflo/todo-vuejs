@@ -104,23 +104,23 @@ export default {
     }),
     drawer: {
       get () {
-        return this.$store.state.drawer
+        return this.$store.getters['ui/drawer']
       },
       set (val) {
-        this.$store.commit('toggleDrawer', val)
+        this.$store.commit('ui/toggleDrawer', val)
       }
     },
     notification: {
       get () {
-        return this.$store.state.notification
+        return this.$store.getters['ui/notification']
       },
       set (val) {
-        this.$store.commit('toggleNotification', val)
+        this.$store.commit('ui/toggleNotification', val)
       }
     }
   },
-  beforeRouteUpdate () {
-    let oNotification = {show: true}
+  mounted () {
+    let oNotification = {}
     if (this.status !== '') {
       oNotification.show = true
       switch (this.status) {
@@ -137,7 +137,7 @@ export default {
           oNotification.msg = 'Have a good day, see you soon!'
           break
       }
-      this.$store.commit('toggleNotification', oNotification)
+      this.notification = oNotification
     }
   },
   methods: {

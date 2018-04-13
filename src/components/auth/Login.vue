@@ -66,6 +66,11 @@ export default {
       v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
     ]
   }),
+  mounted: function () {
+    if (this.email && this.password) {
+      this.valid = true
+    }
+  },
   methods: {
     login () {
       this.$store.dispatch('auth/AUTH_REQUEST', {login: this.email, password: this.password}, {}).then(() => {
