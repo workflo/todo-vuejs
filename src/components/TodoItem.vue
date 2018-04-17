@@ -7,7 +7,7 @@
                         :to="{ name: 'todo-view', params: { id: todo._id }}"
                         tag="v-list-tile-title"
                     >
-                        <span v-on:click="openTodo(todo)">{{ todo.content }}</span>
+                        <span v-on:click="openTodo(todo)">{{ getTodoTitle(todo) }}</span>
                     </router-link>
                 </v-list-tile-content>
                 <v-list-tile-action @click="deleteTodo(todo)">
@@ -32,6 +32,9 @@ export default {
     },
     deleteTodo (oTodo) {
       this.$store.dispatch('todo/deleteTodo', oTodo)
+    },
+    getTodoTitle (oTodo) {
+      return oTodo.title || oTodo.content
     }
   }
 }

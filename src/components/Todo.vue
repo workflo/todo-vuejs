@@ -26,6 +26,12 @@ export default {
       edited_todo: 'edited_todo'
     })
   },
+  mounted () {
+    if (this.$route.params.id) {
+      // @todo bug todo currently not loaded via url parameter better catch a custom event when todos are loaded first
+      // this.$store.dispatch('todo/loadEditedTodo', this.$route.params.id)
+    }
+  },
   methods: {
     ...oStoreTodo.mapActions([
       'getTodo'

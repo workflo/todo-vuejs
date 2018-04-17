@@ -21,7 +21,7 @@ export default {
     }
   },
   watch: {
-    value: function (newVal, oldVal) {
+    value: function (newVal) {
       if (newVal) {
         this.content = newVal
       }

@@ -16,7 +16,6 @@ const actions = {
     context.commit('toggleDrawer', payload)
   },
   toggleNotification (context, payload) {
-    console.log('toggle notif', payload)
     context.commit('toggleNotification', payload)
   }
 }
@@ -26,7 +25,6 @@ const mutations = {
     state.drawer = bOpen
   },
   toggleNotification: (state, oNotification) => {
-    console.log(oNotification)
     state.notification = oNotification
   }
 }

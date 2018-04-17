@@ -68,7 +68,7 @@
             :timeout="5000"
             :bottom="true"
             :vertical="true"
-            v-model="notification.show"
+            :value="notification.show"
     >
       {{ notification.msg }}
       <v-btn flat color="pink" @click.native="notification = { show: false }">Close</v-btn>
@@ -107,7 +107,7 @@ export default {
         return this.$store.getters['ui/drawer']
       },
       set (val) {
-        this.$store.commit('ui/toggleDrawer', val)
+        this.$store.dispatch('ui/toggleDrawer', val)
       }
     },
     notification: {
@@ -115,29 +115,31 @@ export default {
         return this.$store.getters['ui/notification']
       },
       set (val) {
-        this.$store.commit('ui/toggleNotification', val)
+        this.$store.dispatch('ui/toggleNotification', val)
       }
     }
   },
-  mounted () {
-    let oNotification = {}
-    if (this.status !== '') {
-      oNotification.show = true
-      switch (this.status) {
-        case 'loading' :
-          oNotification.msg = 'Loading in progress...'
-          break
-        case 'success' :
-          oNotification.msg = 'Auth success'
-          break
-        case 'error' :
-          oNotification.msg = 'Login error, please check your credentials'
-          break
-        case 'logout' :
-          oNotification.msg = 'Have a good day, see you soon!'
-          break
+  watch: {
+    status (newVal) {
+      let oNotification = {}
+      if (newVal !== '') {
+        oNotification.show = true
+        switch (newVal) {
+          case 'loading' :
+            oNotification.msg = 'Loading in progress...'
+            break
+          case 'success' :
+            oNotification.msg = 'Auth success'
+            break
+          case 'error' :
+            oNotification.msg = 'Login error, please check your credentials'
+            break
+          case 'logout' :
+            oNotification.msg = 'Have a good day, see you soon!'
+            break
+        }
+        this.$store.dispatch('ui/toggleNotification', oNotification)
       }
-      this.notification = oNotification
     }
   },
   methods: {

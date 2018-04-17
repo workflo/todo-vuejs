@@ -22,18 +22,21 @@ const actions = {
   },
   createOrUpdateTodo (context, payload) {
     // Hack to force content-type on x-www-form-urlencoded rather than JSON
+    let sUrl = context.rootGetters.api_url + '/todos'
     let params = new URLSearchParams()
+    let oHeaders = { headers: { Authorization: 'Bearer ' + context.rootGetters['auth/token'], 'Content-type': 'application/x-www-form-urlencoded' } }
+
     params.append('content', payload.content)
     if (payload._id) {
       params.append('id', payload._id)
-      axios.put(context.rootGetters.api_url + '/todos', params, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token'], 'Content-type': 'application/x-www-form-urlencoded'}}).then((oResponse) => {
-        context.commit('updateTodo', payload)
-        context.commit('setEditedTodo', payload)
+      axios.put(sUrl, params, oHeaders).then((oResponse) => {
+        context.commit('updateTodo', oResponse.data.data)
+        context.commit('setEditedTodo', oResponse.data.data)
       }).catch(handleXHRerrors)
     } else {
-      axios.post(context.rootGetters.api_url + '/todos', params, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token'], 'Content-type': 'application/x-www-form-urlencoded'}}).then((oResponse) => {
+      axios.post(sUrl, params, oHeaders).then((oResponse) => {
         context.commit('addTodo', oResponse.data.data)
-        context.commit('setEditedTodo', payload)
+        context.commit('setEditedTodo', oResponse.data.data)
       }).catch(handleXHRerrors)
     }
   },
@@ -54,6 +57,9 @@ const actions = {
         resolve()
       })
     }).catch(handleXHRerrors)
+  },
+  loadEditedTodo: (context, payload) => {
+    context.commit('loadEditedTodo', payload)
   }
 }
 
@@ -90,6 +96,10 @@ const mutations = {
   },
   getTodos: (state, oTodos) => {
     state.todos = oTodos
+  },
+  loadEditedTodo: (state, oQuery) => {
+    console.log(state.todos)
+    state.edited_todo = state.todos.find(todo => todo._id === oQuery.id)
   },
   setEditedTodo: (state, oTodo) => {
     state.edited_todo = oTodo
