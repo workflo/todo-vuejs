@@ -10,7 +10,7 @@
                         <span v-on:click="openTodo(todo)">{{ getTodoTitle(todo) }}</span>
                     </router-link>
                 </v-list-tile-content>
-                <v-list-tile-action @click="deleteTodo(todo)">
+                <v-list-tile-action @click.prevent="deleteTodo(todo)">
                     <v-icon>delete</v-icon>
                 </v-list-tile-action>
             </v-list-tile>

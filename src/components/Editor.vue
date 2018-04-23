@@ -22,9 +22,7 @@ export default {
   },
   watch: {
     value: function (newVal) {
-      if (newVal) {
-        this.content = newVal
-      }
+      this.content = newVal
     },
     content: function (newVal, oldVal) {
       this.$emit('change', newVal)

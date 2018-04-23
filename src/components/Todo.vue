@@ -26,11 +26,21 @@ export default {
       edited_todo: 'edited_todo'
     })
   },
-  mounted () {
-    if (this.$route.params.id) {
-      // @todo bug todo currently not loaded via url parameter better catch a custom event when todos are loaded first
-      // this.$store.dispatch('todo/loadEditedTodo', this.$route.params.id)
-    }
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      // load todo if needed (access by url)
+      if (vm.$route.params.id) {
+        vm.$store.dispatch('todo/getTodoById', { id: vm.$route.params.id })
+      } else {
+        console.log('raz')
+        vm.$store.dispatch('todo/setEditedTodo', { content: '' })
+      }
+
+      vm.$store.dispatch('todo/getTodos')
+    })
+  },
+  beforeRouteUpdate (to, from, next) {
+    console.log(this.$route.params.id)
   },
   methods: {
     ...oStoreTodo.mapActions([
@@ -41,9 +51,7 @@ export default {
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }
-      this.$store.dispatch('todo/createOrUpdateTodo', payload).then(() => {
-        console.log('ok')
-      })
+      this.$store.dispatch('todo/createOrUpdateTodo', payload)
     }
   }
 }

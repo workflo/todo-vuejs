@@ -30,18 +30,17 @@ const actions = {
     if (payload._id) {
       params.append('id', payload._id)
       axios.put(sUrl, params, oHeaders).then((oResponse) => {
-        context.commit('updateTodo', oResponse.data.data)
+        context.commit('createOrUpdateTodo', oResponse.data.data)
         context.commit('setEditedTodo', oResponse.data.data)
       }).catch(handleXHRerrors)
     } else {
       axios.post(sUrl, params, oHeaders).then((oResponse) => {
-        context.commit('addTodo', oResponse.data.data)
+        context.commit('createOrUpdateTodo', oResponse.data.data)
         context.commit('setEditedTodo', oResponse.data.data)
       }).catch(handleXHRerrors)
     }
   },
   setEditedTodo (context, payload) {
-    console.log('setEditedTodo', payload)
     context.commit('setEditedTodo', payload)
   },
   getTodos (context, payload) {
@@ -51,9 +50,9 @@ const actions = {
   },
   getTodoById: (context, payload) => {
     console.log(payload.id)
-    axios.get(context.rootGetters.api_url, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+    axios.get(context.rootGetters.api_url + '/todos?id=' + payload.id, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
       return new Promise((resolve, reject) => {
-        console.log(oResponse)
+        context.commit('setEditedTodo', oResponse.data.data)
         resolve()
       })
     }).catch(handleXHRerrors)
@@ -83,7 +82,22 @@ let handleXHRerrors = function (error) {
 }
 
 const mutations = {
-  createOrUpdateTodo: (state, oTodo) => {},
+  createOrUpdateTodo: (state, oTodo) => {
+    if (state.todos) {
+      let oFoundTodo = state.todos.filter(t => t._id === oTodo._id)
+      if (oFoundTodo) {
+        // Deduplicate
+        for (let i in oFoundTodo) {
+          mutations.deleteTodo(state, oFoundTodo[i])
+        }
+      }
+      if (typeof oTodo._id !== 'undefined') {
+        mutations.updateTodo(state, oTodo)
+      } else {
+        mutations.addTodo(state, oTodo)
+      }
+    }
+  },
   addTodo: (state, oTodo) => {
     state.todos = [...state.todos, oTodo]
   },
@@ -93,12 +107,12 @@ const mutations = {
   },
   deleteTodo: (state, oTodo) => {
     state.todos = state.todos.filter(t => t._id !== oTodo._id)
+    console.log('filtered', state.todos)
   },
   getTodos: (state, oTodos) => {
     state.todos = oTodos
   },
   loadEditedTodo: (state, oQuery) => {
-    console.log(state.todos)
     state.edited_todo = state.todos.find(todo => todo._id === oQuery.id)
   },
   setEditedTodo: (state, oTodo) => {

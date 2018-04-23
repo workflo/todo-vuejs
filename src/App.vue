@@ -25,9 +25,10 @@
       :clipped-left="true"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn v-if="isAuthenticated" icon @click="newTodo({content: ''})">
+      <v-btn v-if="isAuthenticated" :to="{ name: 'todo' }" icon @click="newTodo()">
         <v-icon>note_add</v-icon>
       </v-btn>
+
       <v-toolbar-title v-text="title"></v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -143,13 +144,12 @@ export default {
     }
   },
   methods: {
-    newTodo (oTodo) {
-      this.$store.dispatch('todo/setEditedTodo', oTodo)
-    },
     logout () {
       this.$store.dispatch('auth/AUTH_LOGOUT').then(() => {
         this.$router.push({name: 'connect'})
       })
+    },
+    newTodo () {
     }
   }
 }
