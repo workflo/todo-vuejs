@@ -4,6 +4,7 @@
 
 <script>
 import { VueEditor } from 'vue2-editor'
+import debounce from '@/helpers/debounce'
 
 export default {
   name: 'Editor',
@@ -24,9 +25,9 @@ export default {
     value: function (newVal) {
       this.content = newVal
     },
-    content: function (newVal, oldVal) {
+    content: debounce(function (newVal) {
       this.$emit('change', newVal)
-    }
+    }, 1000)
   },
   data () {
     return {
