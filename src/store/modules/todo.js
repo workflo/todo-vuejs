@@ -49,7 +49,6 @@ const actions = {
     }).catch(handleXHRerrors)
   },
   getTodoById: (context, payload) => {
-    console.log(payload.id)
     axios.get(context.rootGetters.api_url + '/todos?id=' + payload.id, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
       return new Promise((resolve, reject) => {
         context.commit('setEditedTodo', oResponse.data.data)
@@ -99,15 +98,14 @@ const mutations = {
     }
   },
   addTodo: (state, oTodo) => {
-    state.todos = [...state.todos, oTodo]
+    state.todos = [oTodo, ...state.todos]
   },
   updateTodo: (state, oTodo) => {
     mutations.deleteTodo(state, oTodo._id)
-    state.todos = [...state.todos, oTodo]
+    state.todos = [oTodo, ...state.todos]
   },
   deleteTodo: (state, oTodo) => {
     state.todos = state.todos.filter(t => t._id !== oTodo._id)
-    console.log('filtered', state.todos)
   },
   getTodos: (state, oTodos) => {
     state.todos = oTodos

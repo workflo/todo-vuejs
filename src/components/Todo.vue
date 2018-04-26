@@ -2,9 +2,6 @@
   <v-layout row wrap>
       <v-flex xs12>
         <editor :id="edited_todo._id" :value="edited_todo.content" v-on:change="save"></editor>
-        <v-layout justify-end>
-          <v-btn @click="save()">Save</v-btn>
-        </v-layout>
       </v-flex>
   </v-layout>
 </template>

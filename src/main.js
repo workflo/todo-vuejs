@@ -11,6 +11,7 @@ import {
   Vuetify,
   VApp,
   VNavigationDrawer,
+  VSubheader,
   VFooter,
   VList,
   VAvatar,
@@ -37,6 +38,7 @@ Vue.use(Vuetify, {
   components: {
     VApp,
     VNavigationDrawer,
+    VSubheader,
     VFooter,
     VList,
     VAvatar,

@@ -42,9 +42,9 @@
               <v-icon x-large color="secondary">account_circle</v-icon>
             </v-avatar>
           <v-list>
-            <v-list-tile @click="">
+            <router-link :to="{ name: 'profile' }" tag="v-list-tile">
               <v-list-tile-title>My account</v-list-tile-title>
-            </v-list-tile>
+            </router-link>
             <v-list-tile @click="logout()">
               <v-list-tile-title>Logout</v-list-tile-title>
             </v-list-tile>
@@ -62,7 +62,7 @@
     </v-content>
 
     <v-footer :fixed="true" app>
-      <span>&copy; 2017</span>
+      <span>&copy; {{ new Date().getFullYear() }} {{ title }}</span>
     </v-footer>
 
     <v-snackbar

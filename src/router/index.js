@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store/index'
 import Login from '@/components/auth/Login'
+import Profile from '@/components/user/Profile'
 import NotFound from '@/components/NotFound'
 import Home from '@/components/Home'
 import Todo from '@/components/Todo'
@@ -23,6 +24,14 @@ const router = new VueRouter({
       component: Login,
       meta: {
         auth: false
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: {
+        auth: true
       }
     },
     {
