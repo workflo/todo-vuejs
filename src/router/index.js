@@ -66,34 +66,41 @@ const router = new VueRouter({
 
 // Protect routes that require an authenticated user
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(route => route.meta.auth)) {
+  if (typeof to.meta.auth !== 'undefined') {
     // Auth required
     if (to.meta.auth === true) {
+      console.log('auth needed')
       if (store.getters['auth/isAuthenticated'] !== true) {
+        console.log('Not authenticated')
         next({
           name: 'connect',
           query: {r: to.fullPath}
         })
       } else {
+        console.log('Authenticated')
         // Custom redirection with r query parameter
         if (typeof to.query.r !== 'undefined' && to.query.r) {
+          console.log('Authenticated with redirection')
           next({
             path: to.query.r
           })
         } else {
+          console.log('Authenticated without redirection')
           next()
         }
       }
     } else {
+      console.log('Auth not needed')
       // Auth is forbidden on this route (mostly login related routes)
       if (store.getters['auth/isAuthenticated'] === true) {
+        console.log('Auth not needed and user authenticated')
         next('/')
       } else {
+        console.log('Auth not needed and user not authenticated')
         next()
       }
     }
   }
-  next()
 })
 
 export default router

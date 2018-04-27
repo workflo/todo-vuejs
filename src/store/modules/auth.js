@@ -7,7 +7,7 @@ const state = {
 
 const getters = {
   token: state => state.token,
-  isAuthenticated: state => !!state.token,
+  isAuthenticated: state => state.token.length > 1,
   status: state => state.status
 }
 
@@ -29,7 +29,7 @@ const actions = {
           context.dispatch('user/USER_REQUEST', {}, {root: true})
         }
         resolve(oResponse)
-      }).catch(err => {
+      }).catch(function (err) {
         context.commit('AUTH_ERROR', err)
         reject(err)
       })
@@ -52,6 +52,7 @@ const mutations = {
     state.token = localStorage.getItem('access_token')
   },
   'AUTH_ERROR': (state) => {
+    state.token = ''
     state.status = 'error'
   },
   'AUTH_LOGOUT': (state) => {

@@ -36,7 +36,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                             type="submit"
-                            :disabled="!valid"
+                            :disabled="disableSubmit"
                     >
                         submit
                     </v-btn>
@@ -55,6 +55,7 @@ export default {
     password: '235689',
     error: false,
     hidePassword: true,
+    disableSubmit: false,
     valid: false,
     name: '',
     nameRules: [
@@ -73,8 +74,15 @@ export default {
   },
   methods: {
     login () {
+      let context = this
+      this.disableSubmit = true
       this.$store.dispatch('auth/AUTH_REQUEST', {login: this.email, password: this.password}, {}).then(() => {
+        this.disableSubmit = false
         this.$router.push({name: 'todo'})
+      }).catch(function (err) {
+        if (err) {
+          context.disableSubmit = false
+        }
       })
     }
     //

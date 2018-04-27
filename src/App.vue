@@ -127,10 +127,10 @@ export default {
         oNotification.show = true
         switch (newVal) {
           case 'loading' :
-            oNotification.msg = 'Loading in progress...'
+            oNotification.msg = 'Authentication in progress...'
             break
           case 'success' :
-            oNotification.msg = 'Auth success'
+            oNotification.msg = 'Authentication success'
             break
           case 'error' :
             oNotification.msg = 'Login error, please check your credentials'
