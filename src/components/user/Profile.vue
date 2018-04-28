@@ -2,49 +2,41 @@
     <v-container fluid>
 
         <v-flex xs12 sm6 offset-sm3>
-            <v-form ref="form" lazy-validation>
+            <v-form ref="form" lazy-validation v-on:submit.prevent="updateUser">
                 <v-card>
                     <v-card-title primary-title>
 
                         <v-layout row wrap>
-                            <v-flex xs4>
-                                <v-subheader>Language</v-subheader>
+                            <v-flex xs12 class="text-xs-center">
+                                <v-avatar
+                                        :tile="false"
+                                        :size="200"
+                                        class="grey lighten-4"
+                                >
+                                    <img :src="getGravatar(editedUser.email)" alt="avatar">
+                                </v-avatar>
                             </v-flex>
-                            <v-flex xs8>
-                                <v-select
-                                        name="lang"
-                                        label="Language"
-                                        prepend-icon="language"
-                                        :items="languages"
-                                        :rules="[v => !!v || 'Language is required']"
-                                        required
-                                ></v-select>
-                            </v-flex>
-                        </v-layout>
 
-                        <v-layout row wrap>
                             <v-flex xs6>
                                 <v-text-field
-                                        name="firstname"
+                                        name="profile.firstname"
                                         label="Firstname"
                                         single-line
                                         prepend-icon="account_circle"
-                                        :value="profile.profile.firstname"
+                                        v-model="editedUser.profile.firstname"
                                 ></v-text-field>
                             </v-flex>
 
                             <v-flex xs6>
                                 <v-text-field
-                                        name="lastname"
+                                        name="profile.lastname"
                                         label="Lastname"
                                         single-line
                                         prepend-icon="account_circle"
-                                        :value="profile.profile.lastname"
+                                        v-model="editedUser.profile.lastname"
                                 ></v-text-field>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row wrap>
                             <v-flex xs4>
                                 <v-subheader>Email</v-subheader>
                             </v-flex>
@@ -54,61 +46,71 @@
                                         label="Email"
                                         single-line
                                         prepend-icon="mail"
-                                        :value="profile.email"
+                                        :disabled="true"
+                                        v-model="editedUser.email"
                                 ></v-text-field>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row wrap>
                             <v-flex xs4>
                                 <v-subheader>Website</v-subheader>
                             </v-flex>
                             <v-flex xs8>
                                 <v-text-field
-                                        name="url"
+                                        name="profile.url"
                                         label="Website"
                                         single-line
                                         prepend-icon="link"
-                                        :value="profile.profile.url"
+                                        v-model="editedUser.profile.url"
                                 ></v-text-field>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row wrap>
                             <v-flex xs4>
                                 <v-subheader>Gender</v-subheader>
                             </v-flex>
                             <v-flex xs8>
                                 <v-select
-                                        name="gender"
+                                        name="profile.gender"
                                         label="Gender"
                                         prepend-icon="link"
                                         :items="genders"
                                         :rules="[v => !!v || 'Gender is required']"
-                                        :value="profile.profile.gender"
+                                        v-model="editedUser.profile.gender"
                                         required
                                 ></v-select>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row wrap>
                             <v-flex xs4>
                                 <v-subheader>Bio</v-subheader>
                             </v-flex>
                             <v-flex xs8>
                                 <v-text-field
-                                        name="bio"
+                                        name="profile.bio"
                                         label="Bio"
                                         prepend-icon="info_outline"
-                                        :value="profile.profile.bio"
+                                        v-model="editedUser.profile.bio"
                                         multi-line
                                 ></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs4>
+                                <v-subheader>Language</v-subheader>
+                            </v-flex>
+                            <v-flex xs8>
+                                <v-select
+                                        name="profile.lang"
+                                        label="Language"
+                                        prepend-icon="language"
+                                        :items="languages"
+                                        :rules="[v => !!v || 'Language is required']"
+                                        v-model="editedUser.profile.lang"
+                                        required
+                                ></v-select>
                             </v-flex>
                         </v-layout>
 
                     </v-card-title>
                     <v-card-actions>
-                        <v-btn>Update</v-btn>
+                        <v-btn type="submit">Update</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -118,7 +120,7 @@
 
 <script>
 import Vuex from 'vuex'
-
+import gravatarHelper from '@/helpers/gravatar'
 const oStoreUser = Vuex.createNamespacedHelpers('user')
 
 export default {
@@ -127,12 +129,14 @@ export default {
     return {
       languages: ['english', 'french'],
       genders: ['male', 'female'],
-      profile: {
+      editedUser: {
         email: '',
         profile: {
           firstname: '',
           lastname: '',
-          gender: 'male'
+          gender: 'male',
+          lang: 'english',
+          bio: ''
         }
       }
     }
@@ -144,23 +148,22 @@ export default {
   },
   watch: {
     user: function (newVal) {
-      this.profile = newVal
+      let oClonedUser = Object.assign({}, JSON.parse(JSON.stringify(newVal)))
+      this.editedUser = oClonedUser
     }
   },
   beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      // load todo if needed (access by url)
-      if (vm.$route.params.id) {
-        vm.$store.dispatch('todo/getTodoById', { id: vm.$route.params.id })
-      } else {
-        vm.$store.dispatch('todo/setEditedTodo', { content: '' })
-      }
-
-      vm.$store.dispatch('todo/getTodos')
+    next(vm => {
+      vm.$store.dispatch('user/USER_REQUEST', {}, {root: true})
     })
   },
-  beforeRouteUpdate (to, from, next) {
-    console.log(this.$route.params.id)
+  methods: {
+    updateUser (oEvent) {
+      this.$store.dispatch('user/updateUser', this.editedUser, {root: true})
+    },
+    getGravatar (sEmail) {
+      return gravatarHelper(sEmail, 200)
+    }
   }
 }
 </script>

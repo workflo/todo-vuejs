@@ -26,7 +26,7 @@ const actions = {
           // Set axios default JWT token
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
           context.commit('AUTH_SUCCESS', oResponse.data)
-          context.dispatch('user/USER_REQUEST', { user: oResponse.data.user }, {root: true})
+          context.dispatch('user/USER_REQUEST', {}, {root: true})
         }
         resolve(oResponse)
       }).catch(function (err) {
