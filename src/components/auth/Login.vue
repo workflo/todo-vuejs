@@ -26,8 +26,8 @@
                                 counter
                         ></v-text-field>
 
-                        <v-btn href="https://localhost:3000/auth/google">
-                            Twitter
+                        <v-btn @click.prevent="socialLogin('google')" :disabled="disableSubmit">
+                            Google
                         </v-btn>
 
                     </div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Login',
   data: () => ({
@@ -67,6 +69,9 @@ export default {
       v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
     ]
   }),
+  computed: {
+    ...mapGetters(['backend_host'])
+  },
   mounted: function () {
     if (this.email && this.password) {
       this.valid = true
@@ -77,6 +82,18 @@ export default {
       let context = this
       this.disableSubmit = true
       this.$store.dispatch('auth/AUTH_REQUEST', {login: this.email, password: this.password}, {}).then(() => {
+        this.disableSubmit = false
+        this.$router.push({name: 'todo'})
+      }).catch(function (err) {
+        if (err) {
+          context.disableSubmit = false
+        }
+      })
+    },
+    socialLogin (sNetwork) {
+      let context = this
+      this.disableSubmit = true
+      this.$store.dispatch('auth/SOCIAL_AUTH_REQUEST', {network: sNetwork}, {}).then(() => {
         this.disableSubmit = false
         this.$router.push({name: 'todo'})
       }).catch(function (err) {

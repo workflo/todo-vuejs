@@ -25,7 +25,7 @@
       :clipped-left="true"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn v-if="isAuthenticated" :to="{ name: 'todo' }" icon @click="newTodo()">
+      <v-btn v-if="isAuthenticated" :to="{ name: 'todo' }" icon>
         <v-icon>note_add</v-icon>
       </v-btn>
 
@@ -35,9 +35,14 @@
       <v-toolbar-items>
 
         <v-menu v-if="isAuthenticated" offset-y>
-            <v-avatar slot="activator"
+            <v-avatar v-if="user.email" slot="activator"
+                    :size="headerAvatarSize"
+            >
+              <img :src="getGravatar(user.email)" alt="Avatar" />
+            </v-avatar>
+            <v-avatar v-else slot="activator"
                     :tile="true"
-                    :size="64"
+                    :size="headerAvatarSize"
             >
               <v-icon x-large color="secondary">account_circle</v-icon>
             </v-avatar>
@@ -83,8 +88,10 @@ import Vuex from 'vuex'
 import TodoList from './components/TodoList'
 import Editor from './components/Editor'
 import Login from './components/auth/Login'
+import gravatarHelper from './helpers/gravatar'
 
 const oStoreAuth = Vuex.createNamespacedHelpers('auth')
+const oStoreUser = Vuex.createNamespacedHelpers('user')
 
 export default {
   name: 'App',
@@ -95,10 +102,19 @@ export default {
   },
   data () {
     return {
-      title: 'Todo!'
+      title: 'Todo!',
+      headerAvatarSize: 52
+    }
+  },
+  mounted () {
+    if (this.isAuthenticated) {
+      this.$store.dispatch('user/USER_REQUEST', {}, {root: true})
     }
   },
   computed: {
+    ...oStoreUser.mapGetters({
+      user: 'user'
+    }),
     ...oStoreAuth.mapGetters({
       isAuthenticated: 'isAuthenticated',
       status: 'status'
@@ -145,12 +161,18 @@ export default {
   },
   methods: {
     logout () {
+      let context = this
       this.$store.dispatch('auth/AUTH_LOGOUT').then(() => {
-        this.$router.push({name: 'connect'})
+        context.$router.push({name: 'connect'})
       })
     },
-    newTodo () {
+    getGravatar (sEmail) {
+      return gravatarHelper(sEmail, this.headerAvatarSize)
     }
   }
 }
 </script>
+
+<style>
+
+</style>

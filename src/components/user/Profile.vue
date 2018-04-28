@@ -8,6 +8,44 @@
 
                         <v-layout row wrap>
                             <v-flex xs4>
+                                <v-subheader>Language</v-subheader>
+                            </v-flex>
+                            <v-flex xs8>
+                                <v-select
+                                        name="lang"
+                                        label="Language"
+                                        prepend-icon="language"
+                                        :items="languages"
+                                        :rules="[v => !!v || 'Language is required']"
+                                        required
+                                ></v-select>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap>
+                            <v-flex xs6>
+                                <v-text-field
+                                        name="firstname"
+                                        label="Firstname"
+                                        single-line
+                                        prepend-icon="account_circle"
+                                        :value="profile.profile.firstname"
+                                ></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs6>
+                                <v-text-field
+                                        name="lastname"
+                                        label="Lastname"
+                                        single-line
+                                        prepend-icon="account_circle"
+                                        :value="profile.profile.lastname"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap>
+                            <v-flex xs4>
                                 <v-subheader>Email</v-subheader>
                             </v-flex>
                             <v-flex xs8>
@@ -16,34 +54,7 @@
                                         label="Email"
                                         single-line
                                         prepend-icon="mail"
-                                ></v-text-field>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row wrap>
-                            <v-flex xs4>
-                                <v-subheader>Firstname</v-subheader>
-                            </v-flex>
-                            <v-flex xs8>
-                                <v-text-field
-                                        name="firstname"
-                                        label="Firstname"
-                                        single-line
-                                        prepend-icon="account_circle"
-                                ></v-text-field>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row wrap>
-                            <v-flex xs4>
-                                <v-subheader>Lastname</v-subheader>
-                            </v-flex>
-                            <v-flex xs8>
-                                <v-text-field
-                                        name="lastname"
-                                        label="Lastname"
-                                        single-line
-                                        prepend-icon="account_circle"
+                                        :value="profile.email"
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -58,6 +69,7 @@
                                         label="Website"
                                         single-line
                                         prepend-icon="link"
+                                        :value="profile.profile.url"
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -73,8 +85,24 @@
                                         prepend-icon="link"
                                         :items="genders"
                                         :rules="[v => !!v || 'Gender is required']"
+                                        :value="profile.profile.gender"
                                         required
                                 ></v-select>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap>
+                            <v-flex xs4>
+                                <v-subheader>Bio</v-subheader>
+                            </v-flex>
+                            <v-flex xs8>
+                                <v-text-field
+                                        name="bio"
+                                        label="Bio"
+                                        prepend-icon="info_outline"
+                                        :value="profile.profile.bio"
+                                        multi-line
+                                ></v-text-field>
                             </v-flex>
                         </v-layout>
 
@@ -97,13 +125,27 @@ export default {
   name: 'Profile',
   data () {
     return {
-      genders: ['male', 'female']
+      languages: ['english', 'french'],
+      genders: ['male', 'female'],
+      profile: {
+        email: '',
+        profile: {
+          firstname: '',
+          lastname: '',
+          gender: 'male'
+        }
+      }
     }
   },
   computed: {
     ...oStoreUser.mapState({
-      profile: 'profile'
+      user: 'user'
     })
+  },
+  watch: {
+    user: function (newVal) {
+      this.profile = newVal
+    }
   },
   beforeRouteEnter (to, from, next) {
     next((vm) => {
