@@ -71,7 +71,7 @@
     </v-footer>
 
     <v-snackbar
-            :timeout="5000"
+            :timeout="notificationTimeout"
             :bottom="true"
             :vertical="true"
             :value="notification.show"
@@ -90,6 +90,7 @@ import Editor from './components/Editor'
 import Login from './components/auth/Login'
 import gravatarHelper from './helpers/gravatar'
 
+const oStoreUi = Vuex.createNamespacedHelpers('ui')
 const oStoreAuth = Vuex.createNamespacedHelpers('auth')
 const oStoreUser = Vuex.createNamespacedHelpers('user')
 
@@ -112,6 +113,9 @@ export default {
     }
   },
   computed: {
+    ...oStoreUi.mapGetters({
+      notificationTimeout: 'notificationTimeout'
+    }),
     ...oStoreUser.mapGetters({
       user: 'user'
     }),

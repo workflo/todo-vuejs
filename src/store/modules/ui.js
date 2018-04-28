@@ -3,11 +3,13 @@ const state = {
   notification: {
     show: false,
     msg: ''
-  }
+  },
+  notificationTimeout: 5000
 }
 
 const getters = {
   notification: state => state.notification,
+  notificationTimeout: state => state.notificationTimeout,
   drawer: state => state.drawer
 }
 
@@ -16,6 +18,12 @@ const actions = {
     context.commit('toggleDrawer', payload)
   },
   toggleNotification (context, payload) {
+    if (payload.show === true) {
+      // Set to false on callback
+      setTimeout(function () {
+        context.commit('toggleNotification', { show: false, msg: '' })
+      }, context.getters.notificationTimeout)
+    }
     context.commit('toggleNotification', payload)
   }
 }

@@ -153,7 +153,6 @@ export default {
       if (vm.$route.params.id) {
         vm.$store.dispatch('todo/getTodoById', { id: vm.$route.params.id })
       } else {
-        console.log('raz')
         vm.$store.dispatch('todo/setEditedTodo', { content: '' })
       }
 
