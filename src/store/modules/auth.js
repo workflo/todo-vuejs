@@ -25,7 +25,7 @@ const actions = {
           localStorage.setItem('access_token', oResponse.data.token)
           // Set axios default JWT token
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
-          context.commit('AUTH_SUCCESS', oResponse.data)
+          context.commit('AUTH_SUCCESS')
           context.dispatch('user/USER_REQUEST', {}, {root: true})
         }
         resolve(oResponse)
@@ -33,6 +33,22 @@ const actions = {
         context.commit('AUTH_ERROR', err)
         reject(err)
       })
+    })
+  },
+  'EXTERNAL_AUTH_REQUEST': (context, data) => {
+    return new Promise((resolve, reject) => {
+      context.commit('AUTH_REQUEST')
+      let oData = JSON.parse(data)
+      if (oData.token) {
+        localStorage.setItem('access_token', oData.token)
+        // Set axios default JWT token
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + oData.token
+        context.commit('AUTH_SUCCESS')
+        context.dispatch('user/USER_REQUEST', {}, {root: true})
+        resolve(data)
+      } else {
+        context.commit('AUTH_ERROR')
+      }
     })
   },
   'AUTH_LOGOUT': (context) => {

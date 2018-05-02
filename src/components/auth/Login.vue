@@ -49,6 +49,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import debounce from '@/helpers/debounce'
 
 export default {
   name: 'Login',
@@ -92,15 +93,27 @@ export default {
     },
     socialLogin (sNetwork) {
       let context = this
-      this.disableSubmit = true
-      this.$store.dispatch('auth/SOCIAL_AUTH_REQUEST', {network: sNetwork}, {}).then(() => {
-        this.disableSubmit = false
-        this.$router.push({name: 'todo'})
-      }).catch(function (err) {
-        if (err) {
+      let iLeft = (screen.width / 2) - (520 / 2)
+      let iTop = (screen.height / 2) - (520 / 2)
+      let sWindowFeatures = 'location=yes,height=570,width=520,left=' + iLeft + ',top=' + iTop + ',scrollbars=yes,status=yes'
+      window.open('https://localhost:3000/auth/google', '_blank', sWindowFeatures)
+
+      // Social auth process
+      let fSocialAuth = debounce(function (e) {
+        console.log('Social login')
+        context.$store.dispatch('auth/EXTERNAL_AUTH_REQUEST', e.data).then(() => {
           context.disableSubmit = false
-        }
-      })
+          window.removeEventListener('message', fSocialAuth, false)
+          context.$router.push({ name: 'todo' })
+        }).catch(function (err) {
+          if (err) {
+            context.disableSubmit = false
+            window.removeEventListener('message', fSocialAuth, false)
+          }
+        })
+      }, 5000)
+      // Child window message listener
+      window.addEventListener('message', fSocialAuth, false)
     }
     //
     // register: function () {
