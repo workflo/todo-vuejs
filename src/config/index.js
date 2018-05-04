@@ -5,7 +5,7 @@ module.exports = function () {
       api: {
         scheme: 'https',
         host: 'localhost:3000',
-        path: '/api',
+        path: '',
         endpoints: {
           '/auth/token': {
             required_parameters: ['login', 'password']
@@ -17,7 +17,7 @@ module.exports = function () {
       api: {
         scheme: 'https',
         host: 'todo.nbonnici.info',
-        path: '/api',
+        path: '',
         endpoints: {
           '/auth/token': {
             required_parameters: ['login', 'password']
