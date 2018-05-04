@@ -30,6 +30,22 @@
                             Google
                         </v-btn>
 
+                        <v-btn @click.prevent="socialLogin('twitter')" :disabled="disableSubmit">
+                            Twitter
+                        </v-btn>
+
+                        <v-btn @click.prevent="socialLogin('instagram')" :disabled="disableSubmit">
+                            Instagram
+                        </v-btn>
+
+                        <v-btn @click.prevent="socialLogin('facebook')" :disabled="disableSubmit">
+                            Facebook
+                        </v-btn>
+
+                        <v-btn @click.prevent="socialLogin('pinterest')" :disabled="disableSubmit">
+                            Pinterest
+                        </v-btn>
+
                     </div>
                 </v-card-text>
                 <v-card-actions>
@@ -71,7 +87,9 @@ export default {
     ]
   }),
   computed: {
-    ...mapGetters(['backend_host'])
+    ...mapGetters([
+      'backend_host'
+    ])
   },
   mounted: function () {
     if (this.email && this.password) {
@@ -96,11 +114,14 @@ export default {
       let iLeft = (screen.width / 2) - (520 / 2)
       let iTop = (screen.height / 2) - (520 / 2)
       let sWindowFeatures = 'location=yes,height=570,width=520,left=' + iLeft + ',top=' + iTop + ',scrollbars=yes,status=yes'
-      window.open('https://localhost:3000/auth/google', '_blank', sWindowFeatures)
+      window.open(this.backend_host + '/auth/' + sNetwork.toLowerCase(), '_blank', sWindowFeatures)
 
       // Social auth process
       let fSocialAuth = debounce(function (e) {
-        console.log('Social login')
+        if (e.origin !== context.backend_host) {
+          return false
+        }
+
         context.$store.dispatch('auth/EXTERNAL_AUTH_REQUEST', e.data).then(() => {
           context.disableSubmit = false
           window.removeEventListener('message', fSocialAuth, false)
@@ -111,7 +132,8 @@ export default {
             window.removeEventListener('message', fSocialAuth, false)
           }
         })
-      }, 5000)
+      }, 500)
+
       // Child window message listener
       window.addEventListener('message', fSocialAuth, false)
     }
