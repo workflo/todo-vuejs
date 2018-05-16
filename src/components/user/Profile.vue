@@ -121,6 +121,7 @@
 <script>
 import Vuex from 'vuex'
 import gravatarHelper from '@/helpers/gravatar'
+
 const oStoreUser = Vuex.createNamespacedHelpers('user')
 
 export default {
@@ -154,7 +155,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.$store.dispatch('user/USER_REQUEST', {}, {root: true})
+      vm.$store.dispatch('user/USER_REQUEST', { user_id: localStorage.getItem('user_id') }, {root: true})
     })
   },
   methods: {

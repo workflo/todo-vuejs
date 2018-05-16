@@ -118,7 +118,6 @@ export default {
 
       // Social auth process
       let fSocialAuth = debounce(function (e) {
-        console.log(e)
         if (e.origin !== context.backend_host) {
           return false
         }

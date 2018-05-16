@@ -109,7 +109,7 @@ export default {
   },
   mounted () {
     if (this.isAuthenticated) {
-      this.$store.dispatch('user/USER_REQUEST', {}, {root: true})
+      this.$store.dispatch('user/USER_REQUEST', { user_id: this.user_id }, {root: true})
     }
   },
   computed: {
@@ -121,6 +121,7 @@ export default {
     }),
     ...oStoreAuth.mapGetters({
       isAuthenticated: 'isAuthenticated',
+      user_id: 'user_id',
       status: 'status'
     }),
     drawer: {

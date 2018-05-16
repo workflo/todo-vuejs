@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import store from '@/store/index'
 import Login from '@/components/auth/Login'
 import Profile from '@/components/user/Profile'
+import Dashboard from '@/components/Dashboard'
+import DashboardMenu from '@/components/DashboardMenu'
 import NotFound from '@/components/NotFound'
 import Home from '@/components/Home'
 import Todo from '@/components/Todo'
@@ -30,6 +32,17 @@ const router = new VueRouter({
       path: '/profile',
       name: 'profile',
       component: Profile,
+      meta: {
+        auth: true
+      }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      components: {
+        default: Dashboard,
+        drawerLeft: DashboardMenu
+      },
       meta: {
         auth: true
       }

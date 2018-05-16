@@ -31,12 +31,15 @@ export default {
       } else {
         vm.$store.dispatch('todo/setEditedTodo', { content: '' })
       }
-
       vm.$store.dispatch('todo/getTodos')
     })
   },
   beforeRouteUpdate (to, from, next) {
-    console.log(this.$route.params.id)
+    if (to.params.id) {
+      this.$store.dispatch('todo/getTodoById', {id: to.params.id})
+    } else {
+      this.$store.dispatch('todo/setEditedTodo', { content: '' })
+    }
   },
   methods: {
     ...oStoreTodo.mapActions([

@@ -12,7 +12,7 @@ const getters = {
 
 const actions = {
   'USER_REQUEST': (context, payload) => {
-    let sUrl = context.rootGetters['api_url'] + '/users'
+    let sUrl = context.rootGetters['api_url'] + '/users?_id=' + payload.user_id
     let oHeaders = {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
 
     axios.get(sUrl, oHeaders).then((oResponse) => {
@@ -37,6 +37,18 @@ const actions = {
       console.log(oResponse)
     }).catch((err) => {
       console.log(err)
+    })
+  },
+  getUsers: (context, payload) => {
+    let sUrl = context.rootGetters['api_url'] + '/users'
+    let oHeaders = {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
+
+    axios.get(sUrl, oHeaders).then((oResponse) => {
+      context.commit('USER_SUCCESS', oResponse.data.data)
+    }).catch((err) => {
+      console.log(err)
+      // logout on any error at this level 401, 500....
+      context.dispatch('auth/AUTH_LOGOUT', {}, {root: true})
     })
   }
 }

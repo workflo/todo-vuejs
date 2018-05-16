@@ -2,11 +2,13 @@ import axios from 'axios'
 
 const state = {
   token: localStorage.getItem('access_token') || '',
+  user_id: localStorage.getItem('user_id') || '',
   status: ''
 }
 
 const getters = {
   token: state => state.token,
+  user_id: state => state.user_id,
   isAuthenticated: state => state.token.length > 1,
   status: state => state.status
 }
@@ -23,10 +25,11 @@ const actions = {
         // Avoid setting token even to undefined
         if (oResponse.data.token) {
           localStorage.setItem('access_token', oResponse.data.token)
+          localStorage.setItem('user_id', oResponse.data.user._id)
           // Set axios default JWT token
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + oResponse.data.token
           context.commit('AUTH_SUCCESS')
-          context.dispatch('user/USER_REQUEST', {}, {root: true})
+          context.dispatch('user/USER_REQUEST', { user_id: oResponse.data.user._id }, {root: true})
         }
         resolve(oResponse)
       }).catch(function (err) {
@@ -41,10 +44,11 @@ const actions = {
       let oData = JSON.parse(data)
       if (oData.token) {
         localStorage.setItem('access_token', oData.token)
+        localStorage.setItem('user_id', oData.user._id)
         // Set axios default JWT token
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + oData.token
         context.commit('AUTH_SUCCESS')
-        context.dispatch('user/USER_REQUEST', {}, {root: true})
+        context.dispatch('user/USER_REQUEST', { user_id: oData.user._id }, {root: true})
         resolve(data)
       } else {
         context.commit('AUTH_ERROR')
@@ -75,6 +79,7 @@ const mutations = {
     state.status = 'logout'
     state.token = ''
     localStorage.removeItem('access_token') // clear your user's token from localstorage
+    localStorage.removeItem('user_id') // clear your user's id from localstorage
   }
 }
 
