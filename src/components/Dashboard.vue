@@ -31,9 +31,25 @@
                           </v-avatar>
                       </td>
                       <td class="text-xs-center">{{ props.item.email }}</td>
-                      <td class="text-xs-center">{{ buildRoles(props.item.roles) }}</td>
+                      <td class="text-xs-center">
+                          <v-chip
+                                  v-for="role in props.item.roles"
+                                  :key="role._id"
+                                  class="chip--select-multi"
+                          >
+                              <v-avatar class="accent">{{ role.name.slice(0, 1).toUpperCase() }}</v-avatar>
+                              {{ role.name }}
+                          </v-chip>
+                      </td>
                       <td class="text-xs-center">{{ props.item.provider }}</td>
-                      <td class="text-xs-center"><p>Connected accounts ici</p></td>
+                      <td class="text-xs-center">
+                          <v-chip
+                                  v-if="props.item.google"
+                                  class="chip--select-multi"
+                          >
+                              Google
+                          </v-chip>
+                      </td>
                       <td class="text-xs-center">{{ props.item.created }}</td>
                       <td class="text-xs-center"><p>Actions ici</p></td>
                   </template>
@@ -67,6 +83,11 @@ export default {
     return {
       search: '',
       isUsersLoading: true,
+      roleSelected: [],
+      roles: [
+        'user',
+        'admin'
+      ],
       users: [],
       oUserTable: {
         headers: [

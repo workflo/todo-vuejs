@@ -25,9 +25,6 @@
       :clipped-left="true"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn v-if="isAuthenticated" :to="{ name: 'todo' }" icon>
-        <v-icon>note_add</v-icon>
-      </v-btn>
 
       <v-toolbar-title v-text="title"></v-toolbar-title>
 
@@ -66,7 +63,7 @@
       <router-view></router-view>
     </v-content>
 
-    <v-footer :fixed="true" app>
+    <v-footer class="grey darken-3 white--text" :fixed="true" app>
       <span>&copy; {{ new Date().getFullYear() }} {{ title }}</span>
     </v-footer>
 
@@ -85,7 +82,7 @@
 
 <script>
 import Vuex from 'vuex'
-import TodoList from './components/TodoList'
+import TodoList from './components/TodoTable'
 import Editor from './components/Editor'
 import Login from './components/auth/Login'
 import gravatarHelper from './helpers/gravatar'

@@ -8,7 +8,7 @@ import DashboardMenu from '@/components/DashboardMenu'
 import NotFound from '@/components/NotFound'
 import Home from '@/components/Home'
 import Todo from '@/components/Todo'
-import TodoList from '@/components/TodoList'
+import TodoMenu from '@/components/TodoMenu'
 
 // Router middleware
 Vue.use(VueRouter)
@@ -31,7 +31,10 @@ const router = new VueRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: Profile,
+      components: {
+        default: Profile,
+        drawerLeft: TodoMenu
+      },
       meta: {
         auth: true
       }
@@ -57,7 +60,7 @@ const router = new VueRouter({
       name: 'todo',
       components: {
         default: Todo,
-        drawerLeft: TodoList
+        drawerLeft: TodoMenu
       },
       meta: {
         auth: true
@@ -68,7 +71,7 @@ const router = new VueRouter({
       name: 'todo-view',
       components: {
         default: Todo,
-        drawerLeft: TodoList
+        drawerLeft: TodoMenu
       },
       meta: {
         auth: true

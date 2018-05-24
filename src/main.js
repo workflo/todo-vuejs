@@ -10,9 +10,12 @@ import store from './store'
 import {
   Vuetify,
   VApp,
+  VAlert,
   VDataTable,
+  VDialog,
   VNavigationDrawer,
   VSubheader,
+  VChip,
   VDivider,
   VFooter,
   VList,
@@ -39,9 +42,12 @@ Vue.use(VueCookie)
 Vue.use(Vuetify, {
   components: {
     VApp,
+    VAlert,
     VDataTable,
+    VDialog,
     VNavigationDrawer,
     VSubheader,
+    VChip,
     VDivider,
     VFooter,
     VList,

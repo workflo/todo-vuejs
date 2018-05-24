@@ -1,67 +1,8 @@
 import axios from 'axios'
 
-const state = {
-  todos: [],
-  edited_todo: {}
-}
+let handleXHRerrors = function (error, context) {
+  context.dispatch('ui/toggleNotification', { show: true, msg: 'Error: ' + error.message }, { root: true })
 
-const getters = {
-  todos: state => state.todos,
-  // Currently edited todo
-  edited_todo: state => state.edited_todo
-}
-
-const actions = {
-  addTodo (context, payload) {
-    context.commit('addTodo', payload)
-  },
-  deleteTodo (context, payload) {
-    axios.delete(context.rootGetters.api_url + '/todos', {data: {id: payload._id}, headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
-      context.commit('deleteTodo', payload)
-    }).catch(handleXHRerrors)
-  },
-  createOrUpdateTodo (context, payload) {
-    // Hack to force content-type on x-www-form-urlencoded rather than JSON
-    let sUrl = context.rootGetters.api_url + '/todos'
-    let params = new URLSearchParams()
-    let oHeaders = { headers: { Authorization: 'Bearer ' + context.rootGetters['auth/token'], 'Content-type': 'application/x-www-form-urlencoded' } }
-
-    params.append('content', payload.content)
-    if (payload._id) {
-      params.append('id', payload._id)
-      axios.put(sUrl, params, oHeaders).then((oResponse) => {
-        context.commit('createOrUpdateTodo', oResponse.data.data)
-        context.commit('setEditedTodo', oResponse.data.data)
-      }).catch(handleXHRerrors)
-    } else {
-      axios.post(sUrl, params, oHeaders).then((oResponse) => {
-        context.commit('createOrUpdateTodo', oResponse.data.data)
-        context.commit('setEditedTodo', oResponse.data.data)
-      }).catch(handleXHRerrors)
-    }
-  },
-  setEditedTodo (context, payload) {
-    context.commit('setEditedTodo', payload)
-  },
-  getTodos (context, payload) {
-    axios.get(context.rootGetters.api_url + '/todos?sort=' + JSON.stringify({updated: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
-      context.commit('getTodos', oResponse.data.data)
-    }).catch(handleXHRerrors)
-  },
-  getTodoById: (context, payload) => {
-    axios.get(context.rootGetters.api_url + '/todos?id=' + payload.id, {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
-      return new Promise((resolve, reject) => {
-        context.commit('setEditedTodo', oResponse.data.data)
-        resolve()
-      })
-    }).catch(handleXHRerrors)
-  },
-  loadEditedTodo: (context, payload) => {
-    context.commit('loadEditedTodo', payload)
-  }
-}
-
-let handleXHRerrors = function (error) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -78,6 +19,92 @@ let handleXHRerrors = function (error) {
     console.log('Error', error.message)
   }
   console.log(error.config)
+}
+
+const state = {
+  todos: [],
+  edited_todo: {},
+  openTodoDialog: false
+}
+
+const getters = {
+  todos: state => state.todos,
+  // Currently edited todo
+  edited_todo: state => state.edited_todo
+}
+
+const actions = {
+  addTodo (context, payload) {
+    context.commit('addTodo', payload)
+  },
+  deleteTodo (context, payload) {
+    axios.delete(context.rootGetters.api_url + '/todos', {data: {id: payload._id}, headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+      context.commit('deleteTodo', payload)
+    }).catch((error) => {
+      handleXHRerrors(error, context)
+    })
+  },
+  createOrUpdateTodo (context, payload) {
+    // Hack to force content-type on x-www-form-urlencoded rather than JSON
+    let sUrl = context.rootGetters.api_url + '/todos'
+    let params = new URLSearchParams()
+    let oHeaders = { headers: { Authorization: 'Bearer ' + context.rootGetters['auth/token'], 'Content-type': 'application/x-www-form-urlencoded' } }
+
+    let aFields = ['content', 'done']
+    for (let i in aFields) {
+      let sField = aFields[i]
+      console.log(sField, payload[sField])
+      if (payload[sField]) {
+        params.append(sField, payload[sField])
+      }
+    }
+
+    if (payload._id) {
+      params.append('id', payload._id)
+      axios.put(sUrl, params, oHeaders).then((oResponse) => {
+        context.commit('createOrUpdateTodo', oResponse.data.data)
+        context.commit('setEditedTodo', oResponse.data.data)
+      }).catch((error) => {
+        handleXHRerrors(error, context)
+      })
+    } else {
+      axios.post(sUrl, params, oHeaders).then((oResponse) => {
+        context.commit('createOrUpdateTodo', oResponse.data.data)
+        context.commit('setEditedTodo', oResponse.data.data)
+      }).catch((error) => {
+        handleXHRerrors(error, context)
+      })
+    }
+  },
+  setEditedTodo (context, payload) {
+    context.commit('setEditedTodo', payload)
+  },
+  getTodos (context, payload) {
+    axios.get(context.rootGetters.api_url + '/todos?user_id=' + payload.user_id + '&sort=' + JSON.stringify({created: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+      context.commit('getTodos', oResponse.data.data)
+    }).catch((error) => {
+      handleXHRerrors(error, context)
+    })
+  },
+  getTodoById: (context, payload) => {
+    axios.get(
+      context.rootGetters.api_url + '/todos?id=' + payload.id,
+      {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
+    ).then((oResponse) => {
+      return new Promise((resolve, reject) => {
+        context.commit('setEditedTodo', oResponse.data.data)
+        resolve()
+      })
+    }).catch((error) => {
+      handleXHRerrors(error, context)
+    })
+  },
+  loadEditedTodo: (context, payload) => {
+    context.commit('loadEditedTodo', payload)
+  },
+  openTodoDialog: (context, payload) => {
+    context.commit('openTodoDialog', payload)
+  }
 }
 
 const mutations = {
@@ -115,6 +142,9 @@ const mutations = {
   },
   setEditedTodo: (state, oTodo) => {
     state.edited_todo = oTodo
+  },
+  openTodoDialog: (state, oParams) => {
+    state.openTodoDialog = oParams.open
   }
 }
 
