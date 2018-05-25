@@ -2,7 +2,7 @@
   <v-layout row wrap>
       <v-flex xs12>
           <v-list two-line subheader>
-              <v-list-tile v-for="item in items" :key="item.title" avatar :to="{ name: 'todo' }" v-on:click="$store.dispatch('todo/openTodoDialog', { open: true })">
+              <v-list-tile v-for="item in items" :key="item.title" avatar :to="{ name: 'todo' }" v-on:click="newTodo">
                   <v-list-tile-avatar>
                       <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
                   </v-list-tile-avatar>
@@ -48,6 +48,12 @@ export default {
         { icon: 'list_alt', iconClass: 'grey lighten-1 white--text', title: 'Todos', subtitle: '', to: { name: 'todo' } },
         { icon: 'perm_identity', iconClass: 'amber white--text', title: 'User Account', subtitle: '', to: { name: 'profile' } }
       ]
+    }
+  },
+  methods: {
+    newTodo () {
+      this.$store.dispatch('todo/openTodoDialog', { open: true })
+      this.$store.dispatch('todo/setEditedTodo', { content: '' })
     }
   }
 }

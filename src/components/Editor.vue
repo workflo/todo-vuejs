@@ -26,7 +26,9 @@ export default {
       this.content = newVal
     },
     content: debounce(function (newVal) {
-      this.$emit('change', newVal)
+      if (newVal.replace(/<[^>]+>/g, '') !== '') {
+        this.$emit('change', newVal)
+      }
     }, 1000)
   },
   data () {

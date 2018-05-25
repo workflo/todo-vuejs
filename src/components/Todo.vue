@@ -20,7 +20,7 @@
                   <v-toolbar-title>Edition</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
-                      <v-btn dark flat @click.native="$store.dispatch('todo/openTodoDialog', { open: false })">Save</v-btn>
+                      <v-btn dark flat @click.native="saveAndClose(edited_todo.content)">Save</v-btn>
                   </v-toolbar-items>
               </v-toolbar>
               <v-card-text>
@@ -77,12 +77,17 @@ export default {
     ...oStoreTodo.mapActions([
       'getTodo'
     ]),
+    saveAndClose (newValue) {
+      this.save(newValue)
+      this.$store.dispatch('todo/openTodoDialog', { open: false })
+    },
     save (newValue) {
       let payload = { content: newValue }
       if (typeof this.edited_todo._id !== 'undefined') {
         payload._id = this.edited_todo._id
       }
       this.$store.dispatch('todo/createOrUpdateTodo', payload)
+      this.$store.dispatch('ui/toggleNotification', { show: true, msg: 'Todo successfully saved.' })
     }
   }
 }

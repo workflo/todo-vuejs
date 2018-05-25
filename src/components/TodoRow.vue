@@ -29,7 +29,6 @@ export default {
   methods: {
     openTodo (oTodo) {
       this.$store.dispatch('todo/setEditedTodo', oTodo)
-      this.$store.dispatch('ui/toggleDrawer', false)
       this.$store.dispatch('todo/openTodoDialog', { open: true })
     },
     deleteTodo (oTodo) {
