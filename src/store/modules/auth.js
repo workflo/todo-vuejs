@@ -55,6 +55,20 @@ const actions = {
       }
     })
   },
+  'AUTH_REGISTER': (context, data) => {
+    return new Promise((resolve, reject) => {
+      let params = new URLSearchParams()
+      params.append('email', data.login)
+      params.append('password', data.password)
+      params.append('password2', data.password2)
+      axios.post(context.rootState.api.scheme + '://' + context.rootState.api.host + '/auth/register', params).then((oResponse) => {
+        resolve(oResponse)
+      }).catch(function (err) {
+        context.commit('AUTH_ERROR', err)
+        reject(err)
+      })
+    })
+  },
   'AUTH_LOGOUT': (context) => {
     return new Promise((resolve, reject) => {
       context.commit('AUTH_LOGOUT')

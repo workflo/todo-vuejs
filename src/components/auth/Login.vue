@@ -1,31 +1,98 @@
 <template>
-    <v-form v-model="valid" ref="loginform" lazy-validation @submit.prevent="login">
+        <v-tabs
+                value="0"
+                :grow="true"
+        >
+            <v-tab key="login" ripple>
+                Login
+            </v-tab>
+            <v-tab-item key="login">
+                <v-card flat>
+                    <v-card-text>
+                        <v-form v-model="valid" ref="loginform" lazy-validation @submit.prevent="login">
 
+                            <v-text-field
+                                    label="Enter your e-mail address"
+                                    v-model="email"
+                                    :rules="emailRules"
+                                    required
+                            ></v-text-field>
+                            <v-text-field
+                                    name="input-10-1"
+                                    label="Enter your password"
+                                    hint="At least 6 characters"
+                                    v-model="password"
+                                    min="6"
+                                    :append-icon="hidePassword ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (hidePassword = !hidePassword)"
+                                    :type="hidePassword ? 'password' : 'text'"
+                                    counter
+                            ></v-text-field>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    type="submit"
+                                    :disabled="disableSubmit"
+                            >
+                                submit
+                            </v-btn>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-tab-item>
+            <v-tab key="register" ripple>
+                Register
+            </v-tab>
+            <v-tab-item key="register">
+                <v-card flat>
+                    <v-card-text>
+                        <v-form v-model="valid" ref="loginform" lazy-validation @submit.prevent="register">
 
-        <v-flex xs12 sm6 offset-sm3>
-            <h1 class="headline mt-3">Login</h1>
+                            <v-text-field
+                                    label="Enter your e-mail address"
+                                    v-model="email"
+                                    :rules="emailRules"
+                                    required
+                            ></v-text-field>
+                            <v-text-field
+                                    name="input-10-1"
+                                    label="Enter your password"
+                                    hint="At least 8 characters"
+                                    v-model="password"
+                                    min="8"
+                                    :append-icon="hidePassword ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (hidePassword = !hidePassword)"
+                                    :type="hidePassword ? 'password' : 'text'"
+                                    counter
+                            ></v-text-field>
+                            <v-text-field
+                                    name="input-10-1"
+                                    label="Confirm your password"
+                                    hint="At least 8 characters"
+                                    v-model="passwordConfirmation"
+                                    min="8"
+                                    :append-icon="hidePassword ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (hidePassword = !hidePassword)"
+                                    :type="hidePassword ? 'password' : 'text'"
+                                    counter
+                            ></v-text-field>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    type="submit"
+                                    :disabled="disableSubmit"
+                            >
+                                submit
+                            </v-btn>
 
-            <v-card>
-                <v-card-text>
-                    <div>
-                        <v-text-field
-                                label="Enter your e-mail address"
-                                v-model="email"
-                                :rules="emailRules"
-                                required
-                        ></v-text-field>
-                        <v-text-field
-                                name="input-10-1"
-                                label="Enter your password"
-                                hint="At least 6 characters"
-                                v-model="password"
-                                min="6"
-                                :append-icon="hidePassword ? 'visibility' : 'visibility_off'"
-                                :append-icon-cb="() => (hidePassword = !hidePassword)"
-                                :type="hidePassword ? 'password' : 'text'"
-                                counter
-                        ></v-text-field>
-
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-tab-item>
+            <v-tab key="social" ripple>
+                Social
+            </v-tab>
+            <v-tab-item key="social">
+                <v-card flat>
+                    <v-card-text>
                         <v-btn @click.prevent="socialLogin('google')" :disabled="disableSubmit">
                             Google
                         </v-btn>
@@ -45,22 +112,10 @@
                         <v-btn @click.prevent="socialLogin('pinterest')" :disabled="disableSubmit">
                             Pinterest
                         </v-btn>
-
-                    </div>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                            type="submit"
-                            :disabled="disableSubmit"
-                    >
-                        submit
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-flex>
-
-    </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-tab-item>
+        </v-tabs>
 </template>
 
 <script>
@@ -72,6 +127,7 @@ export default {
   data: () => ({
     email: 'test@test.fr',
     password: '235689',
+    passwordConfirmation: '235689',
     error: false,
     hidePassword: true,
     disableSubmit: false,
@@ -109,6 +165,17 @@ export default {
         }
       })
     },
+    register () {
+      let context = this
+      this.disableSubmit = true
+      this.$store.dispatch('auth/AUTH_REGISTER', {login: this.email, password: this.password, password2: this.passwordConfirmation}, {}).then(() => {
+        this.disableSubmit = false
+      }).catch(function (err) {
+        if (err) {
+          context.disableSubmit = false
+        }
+      })
+    },
     socialLogin (sNetwork) {
       let context = this
       let iLeft = (screen.width / 2) - (520 / 2)
@@ -137,12 +204,6 @@ export default {
       // Child window message listener
       window.addEventListener('message', fSocialAuth, false)
     }
-    //
-    // register: function () {
-    //   this.$auth.register({name, email, password }).then(function () {
-    //     // Execute application logic after successful registration
-    //   })
-    // }
   }
 }
 </script>

@@ -11,6 +11,7 @@ import {
   Vuetify,
   VApp,
   VAlert,
+  VTabs,
   VDataTable,
   VDialog,
   VNavigationDrawer,
@@ -43,6 +44,7 @@ Vue.use(Vuetify, {
   components: {
     VApp,
     VAlert,
+    VTabs,
     VDataTable,
     VDialog,
     VNavigationDrawer,
