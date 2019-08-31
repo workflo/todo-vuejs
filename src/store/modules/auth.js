@@ -23,7 +23,6 @@ const actions = {
       params.append('password', data.password)
       axios.post(context.rootState.api.scheme + '://' + context.rootState.api.host + '/auth/token', params).then((oResponse) => {
         // Avoid setting token even to undefined
-        console.log(oResponse.data)
         if (oResponse.data.token) {
           localStorage.setItem('access_token', oResponse.data.token)
           localStorage.setItem('user_id', oResponse.data.user._id)

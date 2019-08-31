@@ -79,7 +79,11 @@ const actions = {
     context.commit('setEditedTodo', payload)
   },
   getTodos (context, payload) {
-    axios.get(context.rootGetters.api_url + '/todos?user_id=' + payload.user_id + '&sort=' + JSON.stringify({created: -1}) + '&page=1&limit=15', {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+    axios.get(context.rootGetters.api_url + '/todos?user_id=' +
+      encodeURIComponent(payload.user_id) +
+      '&sort=' + encodeURIComponent(JSON.stringify({created: -1})) +
+      '&page=1&limit=15',
+    {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
       context.commit('getTodos', oResponse.data.data)
     }).catch((error) => {
       handleXHRerrors(error, context)
