@@ -3,8 +3,8 @@ module.exports = function () {
   let oConfig = {
     development: {
       api: {
-        scheme: 'https',
-        host: 'localhost:3000',
+        scheme: 'http',
+        host: 'localhost:8080/cmsbs/rest/todo',
         path: '',
         endpoints: {
           '/auth/token': {

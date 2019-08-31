@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import VueCookie from 'vue-cookie'
 import router from './router'
+import axios from 'axios'
 
 import store from './store'
 
@@ -79,6 +80,7 @@ Vue.use(Vuetify, {
 })
 
 Vue.config.productionTip = false
+axios.defaults.headers.common['X-CSRF-Safe'] = 'yes'
 
 /* eslint-disable no-new */
 new Vue({
