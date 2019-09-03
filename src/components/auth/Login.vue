@@ -125,9 +125,9 @@ import debounce from '@/helpers/debounce'
 export default {
   name: 'Login',
   data: () => ({
-    email: 'test@test.fr',
-    password: '235689',
-    passwordConfirmation: '235689',
+    email: 'flo@pinuts.de',
+    password: 'flo',
+    passwordConfirmation: 'flo',
     error: false,
     hidePassword: true,
     disableSubmit: false,

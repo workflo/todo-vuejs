@@ -4,7 +4,7 @@ module.exports = function () {
     development: {
       api: {
         scheme: 'http',
-        host: 'localhost:3000/cmsbs/rest/todo',
+        host: 'localhost:3000/cmsbs/rest/de.pinuts.apirouter.api',
         path: '',
         endpoints: {
           '/auth/token': {
