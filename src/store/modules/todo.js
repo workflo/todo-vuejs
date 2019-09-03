@@ -91,7 +91,7 @@ const actions = {
   },
   getTodoById: (context, payload) => {
     axios.get(
-      context.rootGetters.api_url + '/todos?id=' + payload.id,
+      context.rootGetters.api_url + '/todos/' + encodeURIComponent(payload.id),
       {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
     ).then((oResponse) => {
       return new Promise((resolve, reject) => {
@@ -144,6 +144,7 @@ const mutations = {
     state.edited_todo = state.todos.find(todo => todo._id === oQuery.id)
   },
   setEditedTodo: (state, oTodo) => {
+    console.log('setEditedTodo', oTodo)
     state.edited_todo = oTodo
   },
   openTodoDialog: (state, oParams) => {
