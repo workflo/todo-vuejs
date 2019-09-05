@@ -27,7 +27,7 @@ const actions = {
     let sUrl = context.rootGetters['api_url'] + '/users'
     let oHeaders = {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
     let params = new URLSearchParams()
-    params.append('id', payload._id)
+    params.append('id', payload.id)
     params.append('email', payload.email)
     params.append('profile.firstname', payload.profile.firstname)
     params.append('profile.lastname', payload.profile.lastname)
