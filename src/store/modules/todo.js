@@ -53,7 +53,7 @@ const actions = {
     let aFields = ['content', 'done']
     for (let i in aFields) {
       let sField = aFields[i]
-      if (payload[sField]) {
+      if (payload[sField] !== undefined) {
         params.append(sField, payload[sField])
       }
     }
