@@ -1,5 +1,4 @@
 module.exports = function () {
-  console.log('load from store')
   let oConfig = {
     development: {
       api: {
