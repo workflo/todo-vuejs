@@ -2,6 +2,9 @@
 
 > A todo app build with vue.js
 
+# REST API docs
+see https://workflo.github.io/todo-vuejs/
+
 ## Build Setup
 
 ``` bash
