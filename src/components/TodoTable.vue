@@ -15,7 +15,7 @@
                 <v-data-table
                         :headers="todoTable.headers"
                         :items="todos"
-                        :loading="true"
+                        :loading="false"
                         class="elevation-1"
                         :search="search"
                 >
