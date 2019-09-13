@@ -144,7 +144,6 @@ const mutations = {
     state.edited_todo = state.todos.find(todo => todo._id === oQuery.id)
   },
   setEditedTodo: (state, oTodo) => {
-    console.log('setEditedTodo', oTodo)
     state.edited_todo = oTodo
   },
   openTodoDialog: (state, oParams) => {
