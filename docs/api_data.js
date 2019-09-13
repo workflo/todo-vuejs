@@ -112,15 +112,15 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/todos",
+    "url": "/todos/:id",
     "title": "Delete",
     "group": "TODOs",
     "description": "<p>Deletes an existing TODO.</p>",
     "parameter": {
       "fields": {
-        "JSON Body": [
+        "Parameter": [
           {
-            "group": "JSON Body",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "id",
@@ -168,7 +168,7 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "cmsbs-conf/cse/plugins/de.pinuts.todo/rest/TodoController.es6",
     "groupTitle": "TODOs",
-    "name": "DeleteTodos"
+    "name": "DeleteTodosId"
   },
   {
     "type": "get",

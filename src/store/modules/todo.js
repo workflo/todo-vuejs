@@ -38,7 +38,7 @@ const actions = {
     context.commit('addTodo', payload)
   },
   deleteTodo (context, payload) {
-    axios.delete(context.rootGetters.api_url + '/todos', {data: {id: payload._id}, headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
+    axios.delete(context.rootGetters.api_url + '/todos/' + encodeURIComponent(payload._id), { headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}).then((oResponse) => {
       context.commit('deleteTodo', payload)
     }).catch((error) => {
       handleXHRerrors(error, context)
