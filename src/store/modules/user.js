@@ -12,7 +12,7 @@ const getters = {
 
 const actions = {
   'USER_REQUEST': (context, payload) => {
-    let sUrl = context.rootGetters['api_url'] + '/users?_id=' + payload.user_id
+    let sUrl = context.rootGetters['api_url'] + '/users/' + encodeURIComponent(payload.user_id)
     let oHeaders = {headers: {Authorization: 'Bearer ' + context.rootGetters['auth/token']}}
 
     axios.get(sUrl, oHeaders).then((oResponse) => {
