@@ -205,12 +205,6 @@
             "optional": false,
             "field": "401",
             "description": "<p>Missing or invalid Authorization token</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "404",
-            "description": "<p>TODO not found</p>"
           }
         ]
       }
@@ -419,19 +413,19 @@
   },
   {
     "type": "get",
-    "url": "/users/list",
-    "title": "List",
+    "url": "/users/:id",
+    "title": "Show",
     "group": "Users",
-    "description": "<p>Returns an optionally filtered list of registered users.</p>",
+    "description": "<p>Returns the specified user.</p>",
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
             "type": "String",
-            "optional": true,
-            "field": "_id",
-            "description": "<p>If given, return only the user matching this ID.</p>"
+            "optional": false,
+            "field": "id",
+            "description": "<p>The user's ID.</p>"
           }
         ]
       }
@@ -465,6 +459,12 @@
             "optional": false,
             "field": "401",
             "description": "<p>Missing or invalid Authorization token</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>User not found</p>"
           }
         ]
       }
@@ -472,7 +472,7 @@
     "version": "0.0.0",
     "filename": "cmsbs-conf/cse/plugins/de.pinuts.todo/rest/UserController.es6",
     "groupTitle": "Users",
-    "name": "GetUsersList"
+    "name": "GetUsersId"
   },
   {
     "type": "put",
