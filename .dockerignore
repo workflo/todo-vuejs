@@ -1,0 +1,11 @@
+build
+test
+node_modules
+Dockerfile
+package-lock.json
+.editorconfig
+.eslintrc.js
+.gitignore
+docs
+dist
+README.md
